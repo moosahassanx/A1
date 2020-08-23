@@ -25,10 +25,73 @@ class A1
                     newText = file.next();
 
                     // read END
-                    while(newText.equals("END"))
+                    while(!newText.equals("END"))
                     {
-                        //
+                        newText = file.next();
+
+                        if(newText.equals("END"))
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            System.out.println("Display: " + newText);
+                        }
+
                     }
+
+                    System.out.println("End reached. \n");
+                }
+                // read EOF
+                else if(newText.equals("EOF"))
+                {
+                    System.out.println("End of file.");
+                }
+
+                // read details
+                else
+                {
+                    if(newText.equals("ID:"))
+                    {
+                        newText = file.next();
+
+                        System.out.println("Identification: " + newText);
+                    }
+
+                    newText = file.next();
+
+                    if(newText.equals("Arrive:"))
+                    {
+                        newText = file.next();
+
+                        System.out.println("Arrive: " + newText);
+                    }
+
+                    newText = file.next();
+
+                    if(newText.equals("ExecSize:"))
+                    {
+                        newText = file.next();
+
+                        System.out.println("ExecSize: " + newText);
+                    }
+
+                    newText = file.next();
+
+                    if(newText.equals("Priority:"))
+                    {
+                        newText = file.next();
+
+                        System.out.println("ExecSize: " + newText);
+                    }
+
+                    newText = file.next();
+
+                    if(newText.equals("END"))
+                    {
+                        System.out.println("End reached. \n");
+                    }
+
                 }
             }
         }
