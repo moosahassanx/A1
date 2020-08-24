@@ -15,7 +15,8 @@
             "classpath": [
                 ".",
                 "${fileDirname}"
-            ]
+            ],
+            "args": ["datafile1.txt"]
         },
         {
             "name": "Java Console App",
