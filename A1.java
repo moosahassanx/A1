@@ -1,6 +1,7 @@
 // importing java libraries (file scanner and string output)
 import java.io.*;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 class A1
 {
@@ -9,7 +10,9 @@ class A1
         // create file scanner
 		final Scanner file = new Scanner(new File(args[0]));
 		// declare and instantiate string to store scanner inputs
-		String newText = "";
+        String newText = "";
+        
+        ArrayList<Process> processList = new ArrayList<Process>();
 
         try
         {
@@ -51,11 +54,17 @@ class A1
                 // read details
                 else
                 {
+                    // the details
+                    String processId = "ID-NOT-SPECIFIED";
+                    double arriveTime = 0;
+                    double executionSize = 0;
+                    int priorityLevel = 0;
+
                     if(newText.equals("ID:"))
                     {
-                        newText = file.next();
+                        processId = file.next();
 
-                        System.out.println("Process ID: " + newText);
+                        System.out.println("Process ID: " + processId);
                     }
 
                     newText = file.next();
@@ -64,7 +73,9 @@ class A1
                     {
                         newText = file.next();
 
-                        System.out.println("Arrive: " + newText);
+                        arriveTime = Double.parseDouble(newText);
+
+                        System.out.println("Arrive: " + arriveTime);
                     }
 
                     newText = file.next();
@@ -73,7 +84,9 @@ class A1
                     {
                         newText = file.next();
 
-                        System.out.println("ExecSize: " + newText);
+                        executionSize = Double.parseDouble(newText);
+
+                        System.out.println("ExecSize: " + executionSize);
                     }
 
                     newText = file.next();
@@ -81,6 +94,8 @@ class A1
                     if(newText.equals("Priority:"))
                     {
                         newText = file.next();
+
+                        priorityLevel = Integer.parseInt(newText);
 
                         System.out.println("ExecSize: " + newText);
                     }
@@ -92,6 +107,13 @@ class A1
                         System.out.println("End reached. \n");
                     }
 
+                    // make new object
+                    Process processObject = new Process(processId, arriveTime, executionSize, priorityLevel);
+
+                    // add to arraylist
+                    processList.add(processObject);
+                    System.out.println("process \"" + processObject.getId() + "\" has been added.");
+                    
                 }
             }
         }
