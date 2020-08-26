@@ -39,9 +39,9 @@ public class SPN
         pid = new int[list.size()];
         ar = new int[list.size()];
         et = new int[list.size()];
-        ct = new int[list.size()];
-        ta = new int[list.size()];
-        wt = new int[list.size()];
+        ct = new int[list.size()];      // completion time - where in the timeline the process finishes
+        ta = new int[list.size()];      // turn around time = completion time - arrival time
+        wt = new int[list.size()];      // waiting time = turn around time - execution time
         f = new int[list.size()];
 
         // setting process Ids
@@ -62,13 +62,13 @@ public class SPN
         while(true)
 		{
 			int c = list.size(), min = 999;
-			if (tot == list.size()) // total no of process = completed process loop will be terminated
+			if (tot == list.size())     // total no of process = completed process loop will be terminated
 				break;
 			
 			for (int i = 0; i < list.size(); i++)
 			{
 				/*
-				 * If i'th process arrival time <= system time and its flag = 0 and burst<min 
+				 * If i'th process arrival time <= system time and its flag = 0 and burst < min
 				 * That process will be executed first 
 				 */ 
 				if ((ar[i] <= st) && (f[i] == 0) && (et[i] < min))
@@ -109,6 +109,9 @@ public class SPN
         
         System.out.println();
     }
+
+    //HELPFUL VIDEO
+    //https://www.youtube.com/watch?v=TeC5AgWz4Hk
 
     /*
         SPN:
