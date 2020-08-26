@@ -13,6 +13,7 @@ class A1
         String newText = "";
         
         ArrayList<Process> processList = new ArrayList<Process>();
+        int dTime = 0;
 
         try
         {
@@ -38,6 +39,7 @@ class A1
                         }
                         else
                         {
+                            dTime = Integer.parseInt(newText);
                             // System.out.println("Time for running the dispatcher: " + newText);
                         }
 
@@ -132,7 +134,7 @@ class A1
         PRR RoundRobin = new PRR();
 
         // running algorithms
-        FirstCome.feedProcess(processList);
+        FirstCome.feedProcess(processList, dTime);
 
         // System.out.println("*******************************************************");
         

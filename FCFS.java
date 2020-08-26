@@ -15,6 +15,8 @@ public class FCFS
 
     private int listSize;
 
+    private int dispatchTime;
+
     // constructor
     public FCFS()
     {
@@ -22,9 +24,10 @@ public class FCFS
     }
 
     // methods
-    public void feedProcess(ArrayList<Process> list)
+    public void feedProcess(ArrayList<Process> list, int t)
     {
-        listSize = list.size();
+        this.dispatchTime = t;
+        this.listSize = list.size();
 
         pid = new int[list.size()];
         ar = new int[list.size()];
@@ -68,22 +71,27 @@ public class FCFS
 			}
         }
         
-        // finding completion times
+        // finding completion times --> THE SOURCE OF THE PROBLEM IDK
         for(int  i = 0 ; i < list.size(); i++)
 		{
+            // first iteration
 			if( i == 0)
 			{
-				ct[i] = ar[i] + et[i];
-			}
+				ct[i] = dispatchTime + ar[i] + et[i];
+            }
+            
 			else
 			{
+                // arrival time > completion time
 				if( ar[i] > ct[i-1])
 				{
-					ct[i] = ar[i] + et[i];
-				}
+					ct[i] = dispatchTime + ar[i] + et[i];
+                }
+                
+                // arrival time < completion time
                 else
                 {
-                    ct[i] = ct[i-1] + et[i];
+                    ct[i] = dispatchTime + ct[i-1] + et[i];
                 }
             }
             
