@@ -1,16 +1,16 @@
-public class SPN
+public class Dispatcher
 {
-    // attributes
+    // private attributes
     private String name;
 
     // constructor
-    public SPN()
+    public Dispatcher()
     {
         this.name = "test";
     }
 
     // method
-    public String methodExample()
+    public String exampleMethod()
     {
         return this.name;
     }

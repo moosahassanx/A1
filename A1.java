@@ -23,7 +23,7 @@ class A1
                 // read BEGIN
                 if(newText.equals("BEGIN"))
                 {
-                    System.out.println("BEGIN");
+                    // System.out.println("BEGIN");
                     
                     newText = file.next();
 
@@ -38,17 +38,17 @@ class A1
                         }
                         else
                         {
-                            System.out.println("Time for running the dispatcher: " + newText);
+                            // System.out.println("Time for running the dispatcher: " + newText);
                         }
 
                     }
 
-                    System.out.println("End reached. \n");
+                    // System.out.println("End reached. \n");
                 }
                 // read EOF
                 else if(newText.equals("EOF"))
                 {
-                    System.out.println("End of file.");
+                    // System.out.println("End of file.");
                 }
 
                 // read details
@@ -56,15 +56,15 @@ class A1
                 {
                     // the details
                     String processId = "ID-NOT-SPECIFIED";
-                    double arriveTime = 0;
-                    double executionSize = 0;
+                    int arriveTime = 0;
+                    int executionSize = 0;
                     int priorityLevel = 0;
 
                     if(newText.equals("ID:"))
                     {
                         processId = file.next();
 
-                        System.out.println("Process ID: " + processId);
+                        // System.out.println("Process ID: " + processId);
                     }
 
                     newText = file.next();
@@ -73,9 +73,9 @@ class A1
                     {
                         newText = file.next();
 
-                        arriveTime = Double.parseDouble(newText);
+                        arriveTime = Integer.parseInt(newText);
 
-                        System.out.println("Arrive: " + arriveTime);
+                        // System.out.println("Arrive: " + arriveTime);
                     }
 
                     newText = file.next();
@@ -84,9 +84,9 @@ class A1
                     {
                         newText = file.next();
 
-                        executionSize = Double.parseDouble(newText);
+                        executionSize = Integer.parseInt(newText);
 
-                        System.out.println("ExecSize: " + executionSize);
+                        // System.out.println("ExecSize: " + executionSize);
                     }
 
                     newText = file.next();
@@ -97,14 +97,14 @@ class A1
 
                         priorityLevel = Integer.parseInt(newText);
 
-                        System.out.println("ExecSize: " + newText);
+                        // System.out.println("Priority: " + newText);
                     }
 
                     newText = file.next();
 
                     if(newText.equals("END"))
                     {
-                        System.out.println("End reached. \n");
+                        // System.out.println("End reached.");
                     }
 
                     // make new object
@@ -112,7 +112,7 @@ class A1
 
                     // add to arraylist
                     processList.add(processObject);
-                    System.out.println("process \"" + processObject.getId() + "\" has been added.");
+                    // System.out.println("process \"" + processObject.getId() + "\" has been added. \n");
                     
                 }
             }
@@ -124,7 +124,17 @@ class A1
 
         // close file after reading all characters
         file.close();
-        System.out.println("*******************************************************");
+
+        // creating algorithms
+        FCFS FirstCome = new FCFS();
+        SPN ShortProcess = new SPN();
+        PP Preemptive = new PP();
+        PRR RoundRobin = new PRR();
+
+        // running algorithms
+        FirstCome.feedProcess(processList);
+
+        // System.out.println("*******************************************************");
         
         // output
         System.out.println("FCFS:");
@@ -135,6 +145,8 @@ class A1
         System.out.println("T9: p5()");
         System.out.println();
 
+        FirstCome.report();
+
         System.out.println("Process \tTurnaround Time Waiting Time");
         System.out.println("p1 \t");
         System.out.println("p2 \t");
@@ -143,6 +155,7 @@ class A1
         System.out.println("p5 \t");
         System.out.println();
 
+        /*
         System.out.println("SPN:");
         System.out.println("T1: p2()");
         System.out.println("T3: p4()");
@@ -202,5 +215,6 @@ class A1
         System.out.println("PP \t ");
         System.out.println("PRR \t ");
         System.out.println();
+        */
     }
 }

@@ -5,8 +5,6 @@ public class PP
     public PP()
     {
         this.name = "test";
-
-        System.out.println("PP constructor has loaded.");
     }
 
     public String name()

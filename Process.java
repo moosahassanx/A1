@@ -2,8 +2,8 @@ public class Process
 {
     // class attributes
     private String processId;
-    private double arrive;
-    private double execution;
+    private int arrive;
+    private int execution;
     private int priority;
 
     // constructor
@@ -12,7 +12,7 @@ public class Process
         this.processId = "test";
     }
 
-    public Process(String pID, double a, double e, int p)
+    public Process(String pID, int a, int e, int p)
     {
         this.processId = pID;
         this.arrive = a;
@@ -26,12 +26,12 @@ public class Process
         this.processId = i;
     }
 
-    public void setArrive(double a)
+    public void setArrive(int a)
     {
         this.arrive = a;
     }
 
-    public void setExecution(double e)
+    public void setExecution(int e)
     {
         this.execution = e;
     }
@@ -41,18 +41,18 @@ public class Process
         this.priority = p;
     }
 
-    // accessorsa
+    // accessors
     public String getId()
     {
         return this.processId;
     }
 
-    public double getArrive()
+    public int getArrive()
     {
         return this.arrive;
     }
 
-    public double getExecution()
+    public int getExecution()
     {
         return this.execution;
     }
