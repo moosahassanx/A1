@@ -40,17 +40,16 @@ class A1
                         else
                         {
                             dTime = Integer.parseInt(newText);
-                            // System.out.println("Time for running the dispatcher: " + newText);
                         }
 
                     }
 
-                    // System.out.println("End reached. \n");
                 }
+
                 // read EOF
                 else if(newText.equals("EOF"))
                 {
-                    // System.out.println("End of file.");
+                    //
                 }
 
                 // read details
@@ -65,8 +64,6 @@ class A1
                     if(newText.equals("ID:"))
                     {
                         processId = file.next();
-
-                        // System.out.println("Process ID: " + processId);
                     }
 
                     newText = file.next();
@@ -76,8 +73,6 @@ class A1
                         newText = file.next();
 
                         arriveTime = Integer.parseInt(newText);
-
-                        // System.out.println("Arrive: " + arriveTime);
                     }
 
                     newText = file.next();
@@ -87,8 +82,6 @@ class A1
                         newText = file.next();
 
                         executionSize = Integer.parseInt(newText);
-
-                        // System.out.println("ExecSize: " + executionSize);
                     }
 
                     newText = file.next();
@@ -98,15 +91,13 @@ class A1
                         newText = file.next();
 
                         priorityLevel = Integer.parseInt(newText);
-
-                        // System.out.println("Priority: " + newText);
                     }
 
                     newText = file.next();
 
                     if(newText.equals("END"))
                     {
-                        // System.out.println("End reached.");
+                        //
                     }
 
                     // make new object
@@ -114,11 +105,11 @@ class A1
 
                     // add to arraylist
                     processList.add(processObject);
-                    // System.out.println("process \"" + processObject.getId() + "\" has been added. \n");
-                    
+
                 }
             }
         }
+
         catch(final Exception e)
         {
             System.out.println("Error with reading files");
@@ -135,88 +126,21 @@ class A1
 
         // running algorithms
         FirstCome.feedProcess(processList, dTime);
-
-        // System.out.println("*******************************************************");
+        ShortProcess.feedProcess(processList, dTime);
         
         // output
         System.out.println("FCFS:");
-        System.out.println("T1: p1()");
-        System.out.println("T12: p2()");
-        System.out.println("T14: p3()");
-        System.out.println("T17: p4()");
-        System.out.println("T9: p5()");
-        System.out.println();
-
+        FirstCome.results();
         FirstCome.report();
 
-        System.out.println("Process \tTurnaround Time Waiting Time");
-        System.out.println("p1 \t");
-        System.out.println("p2 \t");
-        System.out.println("p3 \t");
-        System.out.println("p4 \t");
-        System.out.println("p5 \t");
-        System.out.println();
-
-        /*
         System.out.println("SPN:");
-        System.out.println("T1: p2()");
-        System.out.println("T3: p4()");
-        System.out.println("T5: p3()");
-        System.out.println("T8: p5()");
-        System.out.println("T14: p1()");
-        System.out.println();
 
-        System.out.println("Process \tTurnaround Time Waiting Time");
-        System.out.println("p1 \t");
-        System.out.println("p2 \t");
-        System.out.println("p3 \t");
-        System.out.println("p4 \t");
-        System.out.println("p5 \t");
-        System.out.println();
 
-        System.out.println("PP:");
-        System.out.println("T1: p1()");
-        System.out.println("T12: p4()");
-        System.out.println("T14: p2()");
-        System.out.println("T16: p3()");
-        System.out.println("T19: p5()");
-        System.out.println();
 
-        System.out.println("Process \tTurnaround Time Waiting Time");
-        System.out.println("p1 \t");
-        System.out.println("p2 \t");
-        System.out.println("p3 \t");
-        System.out.println("p4 \t");
-        System.out.println("p5 \t");
-        System.out.println();
-
-        System.out.println("PRR:");
-        System.out.println("T1: p1()");
-        System.out.println("T6: p2()");
-        System.out.println("T8: p3()");
-        System.out.println("T11: p4()");
-        System.out.println("T13: p5()");
-        System.out.println("T16: p1()");
-        System.out.println("T21: p5()");
-        System.out.println("T24: p1()");
-        System.out.println("T27: p5()");
-        System.out.println();
-
-        System.out.println("Process \tTurnaround Time Waiting Time");
-        System.out.println("p1 \t");
-        System.out.println("p2 \t");
-        System.out.println("p3 \t");
-        System.out.println("p4 \t");
-        System.out.println("p5 \t");
-        System.out.println();
-
-        System.out.println("Summary");
-        System.out.println("Algorithm \t Average Turnaround Time \t Average Waiting Time");
-        System.out.println("FCFS \t ");
-        System.out.println("SPN \t ");
-        System.out.println("PP \t ");
-        System.out.println("PRR \t ");
-        System.out.println();
-        */
+        // final summary
+        System.out.println("Summary:");
+        System.out.println("Algorithm\tAverage Turnaround Time\tAverage Waiting Time");
+        System.out.println("FCFS: \t\t" + FirstCome.getAverageTurnaroundTime() + "\t\t\t" + FirstCome.getAverageWaitingTime());     // FCFS
+        System.out.println("SPN: \t\t");
     }
 }

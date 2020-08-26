@@ -10,12 +10,12 @@ public class FCFS
     private int ta[];                   // turn around times
     private int wt[];                   // waiting times
 
-    private double avgwt = 0;   // average waiting time
-    private double avgta = 0;   // average turn aroudn time
+    private double twt = 0;   // total waiting time
+    private double tta = 0;   // total turn aroudn time
 
     private int listSize;
-
     private int dispatchTime;
+    private ArrayList<Process> processList;
 
     // constructor
     public FCFS()
@@ -28,6 +28,7 @@ public class FCFS
     {
         this.dispatchTime = t;
         this.listSize = list.size();
+        processList = list;
 
         pid = new int[list.size()];
         ar = new int[list.size()];
@@ -97,8 +98,8 @@ public class FCFS
             
 			ta[i] = ct[i] - ar[i] ;     // turnaround time = (completion time) - (arrival time)
 			wt[i] = ta[i] - et[i] ;     // waiting time= (turnaround time) - (burst time)
-			avgwt += wt[i] ;            // total waiting time
-			avgta += ta[i] ;            // total turnaround time
+			twt += wt[i] ;            // total waiting time
+			tta += ta[i] ;            // total turnaround time
         }
 
     }
@@ -106,6 +107,16 @@ public class FCFS
     // print the results
     public void report()
     {
+        // OFFICIAL OUTPUT
+        System.out.println("Process\tTurnaround Time\tWaiting Time");
+        for(int  i = 0 ; i< listSize;  i++)
+		{
+			System.out.println("p" + pid[i] + "\t" + ta[i] + "\t\t" + wt[i] ) ;
+        }
+
+        System.out.println();
+
+        /* USED FOR TESTING
         System.out.println("pid \tarrival \texecution \tcomplete \tturn \twaiting");
 
 		for(int  i = 0 ; i< listSize;  i++)
@@ -113,10 +124,31 @@ public class FCFS
 			System.out.println("p" + pid[i] + "  \t" + ar[i] + "\t\t" + et[i] + "\t\t" + ct[i] + "\t\t" + ta[i] + "\t"  + wt[i] ) ;
         }
         
-		System.out.println("\naverage waiting time: "+ (avgwt / listSize));        // printing average waiting time.
-        System.out.println("average turnaround time:"+(avgta / listSize));         // printing average turnaround time.
+		System.out.println("\naverage waiting time: "+ (twt / listSize));        // printing average waiting time.
+        System.out.println("average turnaround time:"+(tta / listSize));         // printing average turnaround time.
         
         System.out.println();
-	}
+        */
+    }
+
+    public void results()
+    {
+        for(int i = 0; i < listSize; i++)
+        {
+            System.out.println("T" + wt[i] + ": " + processList.get(i).getId() + "(" + processList.get(i).getPriority() + ")");
+        }
+
+        System.out.println();
+    }
+
+    public double getAverageWaitingTime()
+    {
+        return this.twt / listSize;
+    }
+
+    public double getAverageTurnaroundTime()
+    {
+        return this.tta / listSize;
+    }
 
 }
