@@ -4,12 +4,19 @@ public class Process
     private String processId;
     private int arrive;
     private int execution;
+    private int turnaround;
+    private int waiting;
     private int priority;
 
     // constructor
     public Process()
     {
-        this.processId = "test";
+        this.processId = "";
+        this.arrive = 0;
+        this.execution = 0;
+        this.turnaround = 0;
+        this.waiting = 0;
+        this.priority = 0;
     }
 
     public Process(String pID, int a, int e, int p)
@@ -18,6 +25,8 @@ public class Process
         this.arrive = a;
         this.execution = e;
         this.priority = p;
+        this.turnaround = 0;
+        this.waiting = 0;
     }
 
     // mutators
@@ -41,6 +50,16 @@ public class Process
         this.priority = p;
     }
 
+    public void setTurnAround(int t)
+    {
+        this.turnaround = t;
+    }
+
+    public void setWaiting(int w)
+    {
+        this.waiting = w;
+    }
+
     // accessors
     public String getId()
     {
@@ -62,4 +81,13 @@ public class Process
         return this.priority;
     }
 
+    public int getTurnAround()
+    {
+        return this.turnaround;
+    }
+
+    public int getWaiting()
+    {
+        return this.waiting;
+    }
 }
