@@ -98,8 +98,8 @@ public class FCFS
             
 			ta[i] = ct[i] - ar[i] ;     // turnaround time = (completion time) - (arrival time)
 			wt[i] = ta[i] - et[i] ;     // waiting time= (turnaround time) - (burst time)
-			twt += wt[i] ;            // total waiting time
-			tta += ta[i] ;            // total turnaround time
+			twt += wt[i] ;              // total waiting time
+			tta += ta[i] ;              // total turnaround time
         }
 
     }
