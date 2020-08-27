@@ -90,6 +90,9 @@ public class FCFS
             else
             {
                 if(FCFSList.get(i).getArrive() > FCFSList.get(i).getCompletion())
+                {
+                    FCFSList.get(i).setCompletion(c);
+                }
             }
         }
         
