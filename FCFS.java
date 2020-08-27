@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class FCFS
 {
@@ -15,7 +17,7 @@ public class FCFS
 
     private int listSize;
     private int dispatchTime;
-    private ArrayList<Process> processList;
+    private ArrayList<Process> FCFSList;
 
     // constructor
     public FCFS()
@@ -26,9 +28,11 @@ public class FCFS
     // methods
     public void feedProcess(ArrayList<Process> list, int t)
     {
+        this.FCFSList = list;
         this.dispatchTime = t;
+
+
         this.listSize = list.size();
-        processList = list;
 
         pid = new int[list.size()];
         ar = new int[list.size()];
@@ -53,6 +57,9 @@ public class FCFS
         }
 
         // sorting according to arrival times
+        Collections.sort(FCFSList, new sortByArrival());
+
+        // sorting according to arrival times OLD
         for(int i = 0 ; i <list.size(); i++)
 		{
 			for(int  j=0;  j < list.size()-(i+1) ; j++)
@@ -71,8 +78,22 @@ public class FCFS
 				}
 			}
         }
+
+        // finding completion times
+        for(int i = 0; i < FCFSList.size(); i++)
+        {
+            // first iteration
+            if(i == 0)
+            {
+                FCFSList.get(i).setCompletion(dispatchTime + FCFSList.get(i).getArrive() + FCFSList.get(i).getExecution());
+            }
+            else
+            {
+                if(FCFSList.get(i).getArrive() > FCFSList.get(i).getCompletion())
+            }
+        }
         
-        // finding completion times --> THE SOURCE OF THE PROBLEM IDK
+        // finding completion times OLD
         for(int  i = 0 ; i < list.size(); i++)
 		{
             // first iteration
@@ -115,27 +136,13 @@ public class FCFS
         }
 
         System.out.println();
-
-        /* USED FOR TESTING
-        System.out.println("pid \tarrival \texecution \tcomplete \tturn \twaiting");
-
-		for(int  i = 0 ; i< listSize;  i++)
-		{
-			System.out.println("p" + pid[i] + "  \t" + ar[i] + "\t\t" + et[i] + "\t\t" + ct[i] + "\t\t" + ta[i] + "\t"  + wt[i] ) ;
-        }
-        
-		System.out.println("\naverage waiting time: "+ (twt / listSize));        // printing average waiting time.
-        System.out.println("average turnaround time:"+(tta / listSize));         // printing average turnaround time.
-        
-        System.out.println();
-        */
     }
 
     public void results()
     {
         for(int i = 0; i < listSize; i++)
         {
-            System.out.println("T" + wt[i] + ": " + processList.get(i).getId() + "(" + processList.get(i).getPriority() + ")");
+            System.out.println("T" + wt[i] + ": " + FCFSList.get(i).getId() + "(" + FCFSList.get(i).getPriority() + ")");
         }
 
         System.out.println();
@@ -149,6 +156,15 @@ public class FCFS
     public double getAverageTurnaroundTime()
     {
         return this.tta / listSize;
+    }
+
+}
+
+// sorting in accordance to arrival
+class sortByArrival implements Comparator<Process>
+{
+    public int compare(Process o1, Process o2) {
+        return o1.getArrive() - o2.getArrive();
     }
 
 }

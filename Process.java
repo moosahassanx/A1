@@ -6,6 +6,7 @@ public class Process
     private int execution;
     private int turnaround;
     private int waiting;
+    private int completion;
     private int priority;
 
     // constructor
@@ -17,6 +18,7 @@ public class Process
         this.turnaround = 0;
         this.waiting = 0;
         this.priority = 0;
+        this.completion = 0;
     }
 
     public Process(String pID, int a, int e, int p)
@@ -27,6 +29,7 @@ public class Process
         this.priority = p;
         this.turnaround = 0;
         this.waiting = 0;
+        this.completion = 0;
     }
 
     // mutators
@@ -60,6 +63,11 @@ public class Process
         this.waiting = w;
     }
 
+    public void setCompletion(int c)
+    {
+        this.completion = c;
+    }
+
     // accessors
     public String getId()
     {
@@ -89,5 +97,10 @@ public class Process
     public int getWaiting()
     {
         return this.waiting;
+    }
+
+    public int getCompletion()
+    {
+        return this.completion;
     }
 }
