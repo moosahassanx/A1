@@ -2,6 +2,7 @@ public class Process
 {
     // class attributes
     private String processId;
+    private int processNumber;
     private int arrive;
     private int execution;
     private int turnaround;
@@ -13,6 +14,7 @@ public class Process
     public Process()
     {
         this.processId = "";
+        this.processNumber = 0;
         this.arrive = 0;
         this.execution = 0;
         this.turnaround = 0;
@@ -24,6 +26,8 @@ public class Process
     public Process(String pID, int a, int e, int p)
     {
         this.processId = pID;
+        int test = processId.charAt(1);
+        this.processNumber = test;
         this.arrive = a;
         this.execution = e;
         this.priority = p;
@@ -102,5 +106,10 @@ public class Process
     public int getCompletion()
     {
         return this.completion;
+    }
+
+    public int getProcessNumber()
+    {
+        return this.processNumber;
     }
 }

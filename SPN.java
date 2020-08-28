@@ -5,25 +5,25 @@ import java.util.List;
 
 public class SPN {
     // attributes
-    private int pid[];
-    private int at[]; // arrival time
-    private int et[]; // execution time
-    private int ct[]; // completion time
-    private int ta[]; // turnaround time
-    private int wt[]; // waiting time
-    private int f[]; // flagged - check if process if completed or nah
+    private double twt;   // total waiting time
+    private double tta;   // total turn aroudn time
 
-    private int n; // arraylist size
+    private int listSize;                   // arraylist size
+    private int dispatchTime;
+    private ArrayList<Process> FCFSList;
 
     // constructor
     public SPN() {
-        //
+        this.listSize = 0;
+        this.dispatchTime = 0;
+        this.twt = 0;
+        this.tta = 0;
     }
 
     // method
     public void feedProcess(ArrayList<Process> list, int dTime)
     {
-        // awaiting time is cpu time
+        // waiting time is cpu time
         // sort list via execution time
         // iterate thru list 
             // if current process < cpu time
@@ -39,69 +39,12 @@ public class SPN {
 
 
 
-
-        // initializing arraysize in accordance to input
-        pid = new int[list.size()];
-        at = new int[list.size()];
-        et = new int[list.size()];
-        ct = new int[list.size()];
-        ta = new int[list.size()];
-        wt = new int[list.size()];
-        f = new int[list.size()];
-
-        // setting process ID's
-        for(int i = 0; i < list.size(); i++)
-        {
-            pid[i] = i + 1;
-        }
-
         // sort in order of arrival
         sortArrive(list);
         // sort in order of execution
         sortExecution(list);
 
-        // print processes
-        for(int i = 0; i < list.size(); i++)
-        {
-            System.out.println("p" + pid[i] + ": " + list.get(i).getExecution());
-        }
-
         System.out.println();
-
-        // transferring arrival time and burst time into arrays
-        for(int i = 0; i < list.size(); i++)
-        {
-            at[i] = list.get(i).getArrive();
-            et[i] = list.get(i).getExecution();
-        }
-
-        for(int i = 0; i < list.size(); i++)
-        {
-            //
-            System.out.println("p" + pid[i] + ": \t" + at[i] + "\t" + et[i]);
-        }
-
-        // calculating turn around time
-        boolean a = true;
-        for(int i = 0; i < list.size(); i++)
-        {
-            if(a == true)
-            {
-                //
-                ta[i] = dTime + et[i];
-                a = false;
-            }
-
-            // this turnaround time = previous process's turn around time + dTime + this process's execution time
-        }
-
-        // turnaround time testing
-        for(int i = 0; i < list.size(); i++)
-        {
-            //
-            System.out.println("p" + pid[i] + ": " + ta[i]);
-        }
-
 
         /*
         this.n = list.size();
