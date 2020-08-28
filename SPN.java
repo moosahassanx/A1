@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 public class SPN {
     // attributes
@@ -10,7 +9,7 @@ public class SPN {
 
     private int listSize;                   // arraylist size
     private int dispatchTime;
-    private ArrayList<Process> FCFSList;
+    private ArrayList<Process> SPNList;
 
     // constructor
     public SPN() {
@@ -33,16 +32,57 @@ public class SPN {
                 // remove from list
         // flag = has been scheduled as true/false
 
+        System.out.println("****SPN Testing***");
 
-
-
-
-
+        this.SPNList = list;
+        this.dispatchTime = dTime;
+        this.listSize = list.size();
 
         // sort in order of arrival
-        sortArrive(list);
+        sortArrive(SPNList);
         // sort in order of execution
-        sortExecution(list);
+        sortExecution(SPNList);
+
+        int st = 0;
+        int tot = 0;
+
+        // finding completion times
+        for(int i = 0; i < SPNList.size(); i++)
+        {
+            // first iteration
+            if(i == 0)
+            {
+                SPNList.get(i).setCompletion(dispatchTime + SPNList.get(i).getArrive() + SPNList.get(i).getExecution());
+            }
+            else
+            {
+                // arrival time > completion time
+                if(SPNList.get(i).getArrive() > SPNList.get(i-1).getCompletion())
+                {
+                    SPNList.get(i).setCompletion(dispatchTime + SPNList.get(i).getArrive() + SPNList.get(i).getExecution());
+                }
+                // arrival time < completion time
+                else
+                {
+                    SPNList.get(i).setCompletion(dispatchTime + SPNList.get(i-1).getCompletion() + SPNList.get(i).getExecution());
+                }
+            }
+
+            // calculating turnaround time and waiting time
+            SPNList.get(i).setTurnAround(SPNList.get(i).getCompletion() - SPNList.get(i).getArrive());
+            SPNList.get(i).setWaiting(SPNList.get(i).getTurnAround() - SPNList.get(i).getExecution());
+            
+            // accumulating results into total turnaround time and total waiting time
+            tta += SPNList.get(i).getTurnAround();
+            twt += SPNList.get(i).getWaiting();
+        }
+
+        // printing results
+        System.out.println("Process\tTurnaround Time\tWaiting Time");
+        for(int  i = 0 ; i< listSize;  i++)
+		{
+			System.out.println(SPNList.get(i).getId() + "\t" + SPNList.get(i).getTurnAround() + "\t\t" + SPNList.get(i).getWaiting() ) ;
+        }
 
         System.out.println();
 
@@ -125,7 +165,6 @@ public class SPN {
         System.out.println ("average wt is "+ (float)(avgwt/n));
         */
 
-        System.out.println();
     }
 
     public ArrayList<Process> sortArrive(ArrayList<Process> processList)
