@@ -125,16 +125,17 @@ class A1
         PRR RoundRobin = new PRR();
 
         // running algorithms
-        FirstCome.feedProcess(processList, dTime);        
+        FirstCome.feedProcess(processList, dTime);   
+        ShortProcess.feedProcess(processList, dTime);
+
+        // printing results     
         System.out.println("FCFS:");
         FirstCome.results();
         FirstCome.report();
 
-        ShortProcess.feedProcess(processList, dTime);
         System.out.println("SPN:");
         ShortProcess.results();
         ShortProcess.report();
-
 
 
         // final summary

@@ -80,6 +80,7 @@ public class FCFS
 
     public void results()
     {
+        Collections.sort(FCFSList, new sortByWaiting());
         for(int i = 0; i < listSize; i++)
         {
             System.out.println("T" + FCFSList.get(i).getWaiting() + ": " + FCFSList.get(i).getId() + "(" + FCFSList.get(i).getPriority() + ")");
@@ -115,5 +116,14 @@ class sortByProcessId implements Comparator<Process>
     public int compare(Process o1, Process o2)
     {
         return o1.getProcessNumber() - o2.getProcessNumber();
+    }
+}
+
+// sorting in accordance to waiting
+class sortByWaiting implements Comparator<Process>
+{
+    public int compare(Process o1, Process o2)
+    {
+        return o1.getWaiting() - o2.getWaiting();
     }
 }

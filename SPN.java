@@ -31,6 +31,7 @@ public class SPN {
         // sort in order of execution
         sortExecution(FCFSList);
 
+        /*
         // finding completion times
         for(int i = 0; i < FCFSList.size(); i++)
         {
@@ -61,6 +62,7 @@ public class SPN {
             tta += FCFSList.get(i).getTurnAround();
             twt += FCFSList.get(i).getWaiting();
         }
+        */
     }
 
     public void report()
