@@ -5,3 +5,4 @@ sortByArrival.class
 sortByProcessId.class
 sortByWaiting.class
 SPN.class
+Process.class
