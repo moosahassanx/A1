@@ -28,6 +28,12 @@ public class FCFS
         this.dispatchTime = t;
         this.listSize = list.size();
 
+        // clearing all previous data
+        for(int i = 0; i < FCFSList.size(); i++)
+        {
+            FCFSList.get(i).clearCalculations();
+        }
+
         // sorting according to arrival times
         Collections.sort(FCFSList, new sortByArrival());
 

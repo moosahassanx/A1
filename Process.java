@@ -72,6 +72,13 @@ public class Process
         this.completion = c;
     }
 
+    public void clearCalculations()
+    {
+        this.turnaround = 0;
+        this.waiting = 0;
+        this.completion = 0;
+    }
+
     // accessors
     public String getId()
     {
@@ -111,5 +118,20 @@ public class Process
     public int getProcessNumber()
     {
         return this.processNumber;
+    }
+
+    // deep element cloning
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Process clone = null;
+        try
+        {
+            clone = (Process) super.clone();
+        } 
+        catch (CloneNotSupportedException e) 
+        {
+            throw new RuntimeException(e);
+        }
+        return clone;
     }
 }

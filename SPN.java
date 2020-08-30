@@ -9,7 +9,7 @@ public class SPN {
 
     private int listSize;                   // arraylist size
     private int dispatchTime;
-    private ArrayList<Process> FCFSList;
+    private ArrayList<Process> SPNList;
 
     // constructor
     public SPN() {
@@ -22,59 +22,68 @@ public class SPN {
     // method
     public void feedProcess(ArrayList<Process> list, int dTime)
     {
-        this.FCFSList = list;
+        this.SPNList = list;
         this.dispatchTime = dTime;
         this.listSize = list.size();
 
+        // clearing previous data
+        for(int i = 0; i < SPNList.size(); i++)
+        {
+            SPNList.get(i).clearCalculations();
+        }
+
         // sort in order of arrival
-        sortArrive(FCFSList);
+        sortArrive(SPNList);
         // sort in order of execution
-        sortExecution(FCFSList);
+        sortExecution(SPNList);
 
         /*
         // finding completion times
-        for(int i = 0; i < FCFSList.size(); i++)
+        for(int i = 0; i < SPNList.size(); i++)
         {
             // first iteration
             if(i == 0)
             {
-                FCFSList.get(i).setCompletion(dispatchTime + FCFSList.get(i).getArrive() + FCFSList.get(i).getExecution());
+                SPNList.get(i).setCompletion(dispatchTime + SPNList.get(i).getArrive() + SPNList.get(i).getExecution());
             }
             else
             {
                 // arrival time > completion time
-                if(FCFSList.get(i).getArrive() > FCFSList.get(i-1).getCompletion())
+                if(SPNList.get(i).getArrive() > SPNList.get(i-1).getCompletion())
                 {
-                    FCFSList.get(i).setCompletion(dispatchTime + FCFSList.get(i).getArrive() + FCFSList.get(i).getExecution());
+                    SPNList.get(i).setCompletion(dispatchTime + SPNList.get(i).getArrive() + SPNList.get(i).getExecution());
                 }
                 // arrival time < completion time
                 else
                 {
-                    FCFSList.get(i).setCompletion(dispatchTime + FCFSList.get(i-1).getCompletion() + FCFSList.get(i).getExecution());
+                    SPNList.get(i).setCompletion(dispatchTime + SPNList.get(i-1).getCompletion() + SPNList.get(i).getExecution());
                 }
             }
+            
 
             // calculating turnaround time and waiting time
-            FCFSList.get(i).setTurnAround(FCFSList.get(i).getCompletion() - FCFSList.get(i).getArrive());
-            FCFSList.get(i).setWaiting(FCFSList.get(i).getTurnAround() - FCFSList.get(i).getExecution());
+            SPNList.get(i).setTurnAround(SPNList.get(i).getCompletion() - SPNList.get(i).getArrive());
+            SPNList.get(i).setWaiting(SPNList.get(i).getTurnAround() - SPNList.get(i).getExecution());
             
             // accumulating results into total turnaround time and total waiting time
-            tta += FCFSList.get(i).getTurnAround();
-            twt += FCFSList.get(i).getWaiting();
+            tta += SPNList.get(i).getTurnAround();
+            twt += SPNList.get(i).getWaiting();
+            
         }
         */
+        
     }
 
     public void report()
     {
         // OFFICIAL OUTPUT
-        Collections.sort(FCFSList, new sortByProcessId());
+        Collections.sort(SPNList, new sortByProcessId());
 
         // printing results
         System.out.println("Process\tTurnaround Time\tWaiting Time");
         for(int  i = 0 ; i< listSize;  i++)
 		{
-			System.out.println(FCFSList.get(i).getId() + "\t" + FCFSList.get(i).getTurnAround() + "\t\t" + FCFSList.get(i).getWaiting() ) ;
+			System.out.println(SPNList.get(i).getId() + "\t" + SPNList.get(i).getTurnAround() + "\t\t" + SPNList.get(i).getWaiting() ) ;
         }
 
         System.out.println();
@@ -84,7 +93,7 @@ public class SPN {
     {
         for(int i = 0; i < listSize; i++)
         {
-            System.out.println("T" + FCFSList.get(i).getWaiting() + ": " + FCFSList.get(i).getId() + "(" + FCFSList.get(i).getPriority() + ")");
+            System.out.println("T" + SPNList.get(i).getWaiting() + ": " + SPNList.get(i).getId() + "(" + SPNList.get(i).getPriority() + ")");
         }
 
         System.out.println();

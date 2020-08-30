@@ -2,6 +2,7 @@
 import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Collections;
 
 class A1
 {
@@ -12,7 +13,8 @@ class A1
 		// declare and instantiate string to store scanner inputs
         String newText = "";
         
-        ArrayList<Process> processList = new ArrayList<Process>();
+        ArrayList<Process> FCFSList = new ArrayList<Process>();
+        ArrayList<Process> SPNList = new ArrayList<Process>();
         int dTime = 0;
 
         try
@@ -101,10 +103,12 @@ class A1
                     }
 
                     // make new object
-                    Process processObject = new Process(processId, arriveTime, executionSize, priorityLevel);
+                    Process FCFSElement = new Process(processId, arriveTime, executionSize, priorityLevel);
+                    Process SPNElement = new Process(processId, arriveTime, executionSize, priorityLevel);
 
                     // add to arraylist
-                    processList.add(processObject);
+                    FCFSList.add(FCFSElement);
+                    SPNList.add(SPNElement);
 
                 }
             }
@@ -125,10 +129,10 @@ class A1
         PRR RoundRobin = new PRR();
 
         // running algorithms
-        FirstCome.feedProcess(processList, dTime);   
-        ShortProcess.feedProcess(processList, dTime);
+        FirstCome.feedProcess(FCFSList, dTime);   
+        ShortProcess.feedProcess(SPNList, dTime);
 
-        // printing results     
+        // printing results  
         System.out.println("FCFS:");
         FirstCome.results();
         FirstCome.report();
