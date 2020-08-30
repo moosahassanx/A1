@@ -20,24 +20,38 @@ public class SPN {
     }
 
     // method
-    public void feedProcess(ArrayList<Process> list, int dTime)
+    public void feedProcess(ArrayList<Process> ogList, int dTime)
     {
-        this.SPNList = list;
-        this.dispatchTime = dTime;
-        this.listSize = list.size();
-
-        // clearing previous data
-        for(int i = 0; i < SPNList.size(); i++)
+        this.SPNList = new ArrayList<Process>();
+        for(int i = 0; i < ogList.size(); i++)
         {
-            SPNList.get(i).clearCalculations();
+            this.SPNList.add(ogList.get(i));
         }
+
+        this.dispatchTime = dTime;
+        this.listSize = SPNList.size();
 
         // sort in order of arrival
         sortArrive(SPNList);
+
+        // select the process with the least arrival time AND least burst time
+        sortExecution(SPNList);
+
+        // calculate the process completion time, waiting time, turn around time
+        SPNList.get(0).setCompletion( SPNList.get(0).getExecution() );
+        SPNList.get(0).setTurnAround( SPNList.get(0).getCompletion() - SPNList.get(0).getArrive() );
+        SPNList.get(0).setWaiting( SPNList.get(0).getTurnAround() - SPNList.get(0).getExecution() );
+        SPNList.get(0).setFlag(true);
+
+        // after this, make a pool of all the processes which after till the completion of previous process
+        
+
+        // in that pool, select the process with the least burst time... repeat
+
+        /*
         // sort in order of execution
         sortExecution(SPNList);
 
-        /*
         // finding completion times
         for(int i = 0; i < SPNList.size(); i++)
         {
@@ -69,7 +83,9 @@ public class SPN {
             tta += SPNList.get(i).getTurnAround();
             twt += SPNList.get(i).getWaiting();
             
+            
         }
+
         */
         
     }
@@ -127,17 +143,17 @@ public class SPN {
 
     /*
         SPN:
-        T1: p2(2)
-        T3: p4(1)
-        T5: p3(4)
-        T8: p5(5)
-        T14: p1(0)
+        T1: p1(4)
+        T12: p2(2)
+        T14: p4(3)
+        T16: p3(3)
+        T19: p5(1)
 
         Process Turnaround Time Waiting Time
-        p1      24              14
-        p2      2               1
-        p3      7               5
-        p4      4               3
-        p5      13              8
+        p1      11              1
+        p2      11              10
+        p3      12              10
+        p4      5               4
+        p5      10              5
     */
 }

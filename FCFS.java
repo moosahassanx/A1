@@ -22,17 +22,16 @@ public class FCFS
     }
 
     // methods
-    public void feedProcess(ArrayList<Process> list, int t)
+    public void feedProcess(ArrayList<Process> ogList, int t)
     {
-        this.FCFSList = list;
-        this.dispatchTime = t;
-        this.listSize = list.size();
-
-        // clearing all previous data
-        for(int i = 0; i < FCFSList.size(); i++)
+        this.FCFSList = new ArrayList<Process>();
+        for(int i = 0; i < ogList.size(); i++)
         {
-            FCFSList.get(i).clearCalculations();
+            this.FCFSList.add(ogList.get(i));
         }
+
+        this.dispatchTime = t;
+        this.listSize = FCFSList.size();
 
         // sorting according to arrival times
         Collections.sort(FCFSList, new sortByArrival());

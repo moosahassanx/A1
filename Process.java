@@ -9,6 +9,7 @@ public class Process
     private int waiting;
     private int completion;
     private int priority;
+    private boolean isProcessed;
 
     // constructor
     public Process()
@@ -21,6 +22,7 @@ public class Process
         this.waiting = 0;
         this.priority = 0;
         this.completion = 0;
+        this.isProcessed = false;
     }
 
     public Process(String pID, int a, int e, int p)
@@ -34,6 +36,7 @@ public class Process
         this.turnaround = 0;
         this.waiting = 0;
         this.completion = 0;
+        this.isProcessed = false;
     }
 
     // mutators
@@ -70,6 +73,11 @@ public class Process
     public void setCompletion(int c)
     {
         this.completion = c;
+    }
+
+    public void setFlag(boolean f)
+    {
+        this.isProcessed = f;
     }
 
     public void clearCalculations()
@@ -118,6 +126,11 @@ public class Process
     public int getProcessNumber()
     {
         return this.processNumber;
+    }
+
+    public boolean getFlagged()
+    {
+        return this.isProcessed;
     }
 
     // deep element cloning
