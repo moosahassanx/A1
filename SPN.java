@@ -7,31 +7,24 @@ public class SPN {
     private double twt;   // total waiting time
     private double tta;   // total turn aroudn time
 
-    private int listSize;                   // arraylist size
-    private int dispatchTime;
     private ArrayList<Process> SPNList;
     private ArrayList<Process> bList;
 
     // constructor
     public SPN() {
-        this.listSize = 0;
-        this.dispatchTime = 0;
-        this.twt = 0;
-        this.tta = 0;
+        this.twt = 0;       // total waiting time
+        this.tta = 0;       // total turnaround time
+        this.bList = new ArrayList<Process>();
+        this.SPNList = new ArrayList<Process>();
     }
 
     // method
     public void feedProcess(ArrayList<Process> ogList, int dTime)
     {
-        this.bList = new ArrayList<Process>();
-        this.SPNList = new ArrayList<Process>();
         for(int i = 0; i < ogList.size(); i++)
         {
             this.SPNList.add(ogList.get(i));
         }
-
-        this.dispatchTime = dTime;
-        this.listSize = SPNList.size();
 
         // sort in order of arrival
         sortArrive(SPNList);
@@ -40,9 +33,10 @@ public class SPN {
         int cpuWatch = 0;
         while(c < SPNList.size())
         {
+            // first iteration
             if(c == 0){
-                SPNList.get(c).setStartsAt(dispatchTime);
-                SPNList.get(c).setCompletion(dispatchTime + SPNList.get(c).getArrive() + SPNList.get(c).getExecution());
+                SPNList.get(c).setStartsAt(dTime);
+                SPNList.get(c).setCompletion(dTime + SPNList.get(c).getArrive() + SPNList.get(c).getExecution());
                 SPNList.get(c).setFlag(true);
                 cpuWatch = SPNList.get(c).getCompletion();
                 this.bList.add(SPNList.get(c));
@@ -63,7 +57,7 @@ public class SPN {
 
             // calculations
             bList.add(compMini.get(0));
-            bList.get(c).setStartsAt(dispatchTime + bList.get(c-1).getCompletion());
+            bList.get(c).setStartsAt(dTime + bList.get(c-1).getCompletion());
             bList.get(c).setCompletion(bList.get(c).getStartsAt() + bList.get(c).getExecution());
             bList.get(c).setFlag(true);
             cpuWatch = bList.get(c).getCompletion();
@@ -72,34 +66,34 @@ public class SPN {
             c++;
         }
 
-        // calculating turnaround / waiting times
+        // final calculations
         Collections.sort(bList, new sortByProcessId());
         for(int i = 0; i < bList.size(); i++)
         {
+            // calculating turnaround/waiting times
             bList.get(i).setTurnAround(bList.get(i).getCompletion() - bList.get(i).getArrive());
             bList.get(i).setWaiting(bList.get(i).getTurnAround() - bList.get(i).getExecution());
 
+            // accumulating total turnaround/waiting times
             twt += bList.get(i).getWaiting();
             tta += bList.get(i).getTurnAround();
         }
 
     }
 
+    // process id | turnaround time | waiting time
     public void report()
     {
-        // OFFICIAL OUTPUT
         Collections.sort(bList, new sortByProcessId());
-
-        // printing results
         System.out.println("Process\tTurnaround Time\tWaiting Time");
         for(int  i = 0 ; i< bList.size();  i++)
 		{
 			System.out.println(bList.get(i).getId() + "\t" + bList.get(i).getTurnAround() + "\t\t" + bList.get(i).getWaiting() ) ;
         }
-
         System.out.println();
     }
 
+    // start time | process id | process priority
     public void results()
     {
         Collections.sort(bList, new sortByStartsAt());
@@ -107,19 +101,20 @@ public class SPN {
         {
             System.out.println("T" + bList.get(i).getStartsAt() + ": " + bList.get(i).getId() + "(" + bList.get(i).getPriority() + ")");
         }
-
         System.out.println();
     }
 
+    // calcualtion averages
     public double getAverageWaitingTime()
     {
-        return this.twt / listSize;
+        return this.twt / this.bList.size();
     }
     public double getAverageTurnaroundTime()
     {
-        return this.tta / listSize;
+        return this.tta / this.bList.size();
     }
 
+    // sorting in accordance to arrival
     public ArrayList<Process> sortArrive(ArrayList<Process> processList)
     {
         Collections.sort(processList, Comparator.comparing(Process::getArrive)
@@ -127,6 +122,7 @@ public class SPN {
         return processList;
     }
 
+    // sorting in accordance to execution
     public ArrayList<Process> sortExecution(ArrayList<Process> processList)
     {
         Collections.sort(processList, Comparator.comparing(Process::getExecution)

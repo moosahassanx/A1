@@ -1,19 +1,47 @@
+import java.util.ArrayList;
+
 public class PP
 {
-    private String name;
+    private ArrayList<Process> PPList;
+    private int twt;        // total waiting time
+    private int tta;        // total turnaround time
 
     public PP()
     {
-        this.name = "test";
+        this.PPList = new ArrayList<Process>();
+        this.twt = 0;
+        this.tta = 0;
     }
 
-    public String name()
+    public void feedProcess(ArrayList<Process> ogList, int dTime)
     {
-        return this.name;
+        for(int i = 0; i < ogList.size(); i++)
+        {
+            this.PPList.add(ogList.get(i));
+        }
+
+        System.out.println("id\tarrive\texec\tcomplet\tstarts\tturnAr\twaiting");
+        for(int i = 0; i < PPList.size(); i++)
+        {
+            System.out.println(PPList.get(i).getId() + "\t" + PPList.get(i).getArrive() + "\t" + PPList.get(i).getExecution() + "\t" + PPList.get(i).getCompletion() + "\t" + PPList.get(i).getStartsAt() + "\t" + PPList.get(i).getTurnAround() + "\t" + PPList.get(i).getWaiting());
+        }
+
+        System.out.println("*********************************************************");
     }
+
+    // calculating averages
+    public double getAverageWaitingTime()
+    {
+        return this.twt / this.PPList.size();
+    }
+    public double getAverageTurnaroundTime()
+    {
+        return this.tta / this.PPList.size();
+    }
+
 }
 
-/*
+/* COPY THIS FOR TESTING
     System.out.println("id\tarrive\texec\tcomplet\tstarts\tturnAr\twaiting");
     for(int i = 0; i < bList.size(); i++)
     {

@@ -2,11 +2,10 @@
 import java.io.*;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.Collections;
 
 class A1
 {
-    public static void main (final String[] args) throws IOException 
+    public static void main (final String[] args) throws IOException
     {
         // create file scanner
 		final Scanner file = new Scanner(new File(args[0]));
@@ -15,6 +14,7 @@ class A1
         
         ArrayList<Process> FCFSList = new ArrayList<Process>();
         ArrayList<Process> SPNList = new ArrayList<Process>();
+        ArrayList<Process> PPList = new ArrayList<Process>();
         int dTime = 0;
 
         try
@@ -105,11 +105,12 @@ class A1
                     // make new object
                     Process FCFSElement = new Process(processId, arriveTime, executionSize, priorityLevel);
                     Process SPNElement = new Process(processId, arriveTime, executionSize, priorityLevel);
+                    Process PPElement = new Process(processId, arriveTime, executionSize, priorityLevel);
 
                     // add to arraylist
                     FCFSList.add(FCFSElement);
                     SPNList.add(SPNElement);
-
+                    PPList.add(PPElement);
                 }
             }
         }
@@ -129,8 +130,9 @@ class A1
         PRR RoundRobin = new PRR();
 
         // running algorithms
-        FirstCome.feedProcess(FCFSList, dTime);   
+        FirstCome.feedProcess(FCFSList, dTime);
         ShortProcess.feedProcess(SPNList, dTime);
+        Preemptive.feedProcess(PPList, dTime);
 
         // printing results  
         System.out.println("FCFS:");
@@ -147,5 +149,6 @@ class A1
         System.out.println("Algorithm\tAverage Turnaround Time\tAverage Waiting Time");
         System.out.println("FCFS: \t\t" + FirstCome.getAverageTurnaroundTime() + "\t\t\t" + FirstCome.getAverageWaitingTime());     // FCFS
         System.out.println("SPN: \t\t" + ShortProcess.getAverageTurnaroundTime() + "\t\t\t" + ShortProcess.getAverageWaitingTime() );  // SPN
+        System.out.println("PP: \t\t" + Preemptive.getAverageTurnaroundTime() + "\t\t\t" + Preemptive.getAverageWaitingTime());     // PP
     }
 }
