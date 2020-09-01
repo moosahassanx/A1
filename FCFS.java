@@ -7,19 +7,20 @@ public class FCFS
     // private attributes
     private double twt;   // total waiting time
     private double tta;   // total turn aroudn time
-    private ArrayList<Process> FCFSList;
+    private ArrayList<Process> FCFSList;    // cloned arraylist
 
     // constructor
     public FCFS()
     {
         this.twt = 0;
         this.tta = 0;
+        this.FCFSList = new ArrayList<Process>();
     }
 
     // methods
     public void feedProcess(ArrayList<Process> ogList, final int dTime)
     {
-        this.FCFSList = new ArrayList<Process>();
+        // deep element arraylist cloning
         for(int i = 0; i < ogList.size(); i++)
         {
             this.FCFSList.add(ogList.get(i));

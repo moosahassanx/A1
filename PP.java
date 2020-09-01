@@ -20,6 +20,7 @@ public class PP
             this.PPList.add(ogList.get(i));
         }
 
+        /*
         System.out.println("id\tarrive\texec\tcomplet\tstarts\tturnAr\twaiting");
         for(int i = 0; i < PPList.size(); i++)
         {
@@ -27,6 +28,17 @@ public class PP
         }
 
         System.out.println("*********************************************************");
+        */
+    }
+
+    public void results()
+    {
+        System.out.println("results() method has not been made. \n");
+    }
+
+    public void report()
+    {
+        System.out.println("report() method has not been made. \n");
     }
 
     // calculating averages

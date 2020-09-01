@@ -12,7 +12,7 @@ public class Process
     private boolean isProcessed;
     private int startsAt;
 
-    // constructor
+    // constructors
     public Process()
     {
         this.processId = "";
@@ -26,7 +26,6 @@ public class Process
         this.isProcessed = false;
         this.startsAt = 0;
     }
-
     public Process(String pID, int a, int e, int p)
     {
         this.processId = pID;

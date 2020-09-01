@@ -143,6 +143,10 @@ class A1
         ShortProcess.results();
         ShortProcess.report();
 
+        System.out.println("PP:");
+        Preemptive.results();
+        Preemptive.report();
+
 
         // final summary
         System.out.println("Summary:");
