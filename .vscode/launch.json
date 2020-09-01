@@ -16,7 +16,7 @@
                 ".",
                 "${fileDirname}"
             ],
-            "args": ["datafile1.txt"]
+            "args": ["datafile2.txt"]
         },
         {
             "name": "Java Console App",

@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import javax.swing.SpinnerListModel;
+
 public class FCFS
 {
     // private attributes
@@ -42,6 +44,7 @@ public class FCFS
             // first iteration
             if(i == 0)
             {
+                FCFSList.get(i).setStartsAt(dispatchTime);
                 FCFSList.get(i).setCompletion(dispatchTime + FCFSList.get(i).getArrive() + FCFSList.get(i).getExecution());
             }
             else
@@ -49,11 +52,13 @@ public class FCFS
                 // arrival time > completion time
                 if(FCFSList.get(i).getArrive() > FCFSList.get(i-1).getCompletion())
                 {
+                    FCFSList.get(i).setStartsAt( FCFSList.get(i-1).getCompletion() + dispatchTime);
                     FCFSList.get(i).setCompletion(dispatchTime + FCFSList.get(i).getArrive() + FCFSList.get(i).getExecution());
                 }
                 // arrival time < completion time
                 else
                 {
+                    FCFSList.get(i).setStartsAt( FCFSList.get(i-1).getCompletion() + dispatchTime);
                     FCFSList.get(i).setCompletion(dispatchTime + FCFSList.get(i-1).getCompletion() + FCFSList.get(i).getExecution());
                 }
             }
@@ -66,7 +71,6 @@ public class FCFS
             tta += FCFSList.get(i).getTurnAround();
             twt += FCFSList.get(i).getWaiting();
         }
-
     }
 
     public void report()
@@ -85,10 +89,10 @@ public class FCFS
 
     public void results()
     {
-        Collections.sort(FCFSList, new sortByWaiting());
+        Collections.sort(FCFSList, new sortByStartsAt());
         for(int i = 0; i < listSize; i++)
         {
-            System.out.println("T" + FCFSList.get(i).getWaiting() + ": " + FCFSList.get(i).getId() + "(" + FCFSList.get(i).getPriority() + ")");
+            System.out.println("T" + FCFSList.get(i).getStartsAt() + ": " + FCFSList.get(i).getId() + "(" + FCFSList.get(i).getPriority() + ")");
         }
 
         System.out.println();
@@ -130,5 +134,14 @@ class sortByWaiting implements Comparator<Process>
     public int compare(Process o1, Process o2)
     {
         return o1.getWaiting() - o2.getWaiting();
+    }
+}
+
+// sorting in accordance to starts at time
+class sortByStartsAt implements Comparator<Process>
+{
+    public int compare(Process o1, Process o2)
+    {
+        return o1.getStartsAt() - o2.getStartsAt();
     }
 }

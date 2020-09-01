@@ -146,6 +146,6 @@ class A1
         System.out.println("Summary:");
         System.out.println("Algorithm\tAverage Turnaround Time\tAverage Waiting Time");
         System.out.println("FCFS: \t\t" + FirstCome.getAverageTurnaroundTime() + "\t\t\t" + FirstCome.getAverageWaitingTime());     // FCFS
-        System.out.println("SPN: \t\t" + ShortProcess.getAverageWaitingTime() + "\t\t\t" + ShortProcess.getAverageWaitingTime() );  // SPN
+        System.out.println("SPN: \t\t" + ShortProcess.getAverageTurnaroundTime() + "\t\t\t" + ShortProcess.getAverageWaitingTime() );  // SPN
     }
 }

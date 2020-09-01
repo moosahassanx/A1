@@ -10,6 +10,7 @@ public class Process
     private int completion;
     private int priority;
     private boolean isProcessed;
+    private int startsAt;
 
     // constructor
     public Process()
@@ -23,6 +24,7 @@ public class Process
         this.priority = 0;
         this.completion = 0;
         this.isProcessed = false;
+        this.startsAt = 0;
     }
 
     public Process(String pID, int a, int e, int p)
@@ -37,6 +39,7 @@ public class Process
         this.waiting = 0;
         this.completion = 0;
         this.isProcessed = false;
+        this.startsAt = 0;
     }
 
     // mutators
@@ -86,6 +89,11 @@ public class Process
         this.waiting = 0;
         this.completion = 0;
     }
+    
+    public void setStartsAt(int s)
+    {
+        this.startsAt = s;
+    }
 
     // accessors
     public String getId()
@@ -131,6 +139,10 @@ public class Process
     public boolean getFlagged()
     {
         return this.isProcessed;
+    }
+
+    public int getStartsAt() {
+        return this.startsAt;
     }
 
     // deep element cloning

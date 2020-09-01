@@ -10,6 +10,7 @@ public class SPN {
     private int listSize;                   // arraylist size
     private int dispatchTime;
     private ArrayList<Process> SPNList;
+    private ArrayList<Process> bList;
 
     // constructor
     public SPN() {
@@ -22,6 +23,7 @@ public class SPN {
     // method
     public void feedProcess(ArrayList<Process> ogList, int dTime)
     {
+        this.bList = new ArrayList<Process>();
         this.SPNList = new ArrayList<Process>();
         for(int i = 0; i < ogList.size(); i++)
         {
@@ -34,72 +36,65 @@ public class SPN {
         // sort in order of arrival
         sortArrive(SPNList);
 
-        // select the process with the least arrival time AND least burst time
-        sortExecution(SPNList);
-
-        // calculate the process completion time, waiting time, turn around time
-        SPNList.get(0).setCompletion( SPNList.get(0).getExecution() );
-        SPNList.get(0).setTurnAround( SPNList.get(0).getCompletion() - SPNList.get(0).getArrive() );
-        SPNList.get(0).setWaiting( SPNList.get(0).getTurnAround() - SPNList.get(0).getExecution() );
-        SPNList.get(0).setFlag(true);
-
-        // after this, make a pool of all the processes which after till the completion of previous process
-        
-
-        // in that pool, select the process with the least burst time... repeat
-
-        /*
-        // sort in order of execution
-        sortExecution(SPNList);
-
-        // finding completion times
-        for(int i = 0; i < SPNList.size(); i++)
+        int c = 0;
+        int cpuWatch = 0;
+        while(c < SPNList.size())
         {
-            // first iteration
-            if(i == 0)
-            {
-                SPNList.get(i).setCompletion(dispatchTime + SPNList.get(i).getArrive() + SPNList.get(i).getExecution());
+            if(c == 0){
+                SPNList.get(c).setStartsAt(dispatchTime);
+                SPNList.get(c).setCompletion(dispatchTime + SPNList.get(c).getArrive() + SPNList.get(c).getExecution());
+                SPNList.get(c).setFlag(true);
+                cpuWatch = SPNList.get(c).getCompletion();
+                this.bList.add(SPNList.get(c));
+                c++;
             }
-            else
-            {
-                // arrival time > completion time
-                if(SPNList.get(i).getArrive() > SPNList.get(i-1).getCompletion())
-                {
-                    SPNList.get(i).setCompletion(dispatchTime + SPNList.get(i).getArrive() + SPNList.get(i).getExecution());
-                }
-                // arrival time < completion time
-                else
-                {
-                    SPNList.get(i).setCompletion(dispatchTime + SPNList.get(i-1).getCompletion() + SPNList.get(i).getExecution());
-                }
-            }
-            
 
-            // calculating turnaround time and waiting time
-            SPNList.get(i).setTurnAround(SPNList.get(i).getCompletion() - SPNList.get(i).getArrive());
-            SPNList.get(i).setWaiting(SPNList.get(i).getTurnAround() - SPNList.get(i).getExecution());
-            
-            // accumulating results into total turnaround time and total waiting time
-            tta += SPNList.get(i).getTurnAround();
-            twt += SPNList.get(i).getWaiting();
-            
-            
+            // selecting the next process
+            sortExecution(SPNList);
+            ArrayList<Process> compMini = new ArrayList<Process>();
+            for(int i = 0; i < SPNList.size(); i++)
+            {
+                if((SPNList.get(i).getArrive() < cpuWatch) && SPNList.get(i).getFlagged() == false)
+                {
+                    compMini.add(SPNList.get(i));
+                }
+            }
+            sortExecution(compMini);
+
+            // calculations
+            bList.add(compMini.get(0));
+            bList.get(c).setStartsAt(dispatchTime + bList.get(c-1).getCompletion());
+            bList.get(c).setCompletion(bList.get(c).getStartsAt() + bList.get(c).getExecution());
+            bList.get(c).setFlag(true);
+            cpuWatch = bList.get(c).getCompletion();
+
+            compMini.clear();       // refresh this for next loop
+            c++;
         }
 
-        */
-        
+        // calculating turnaround / waiting times
+        Collections.sort(bList, new sortByProcessId());
+        for(int i = 0; i < bList.size(); i++)
+        {
+            bList.get(i).setTurnAround(bList.get(i).getCompletion() - bList.get(i).getArrive());
+            bList.get(i).setWaiting(bList.get(i).getTurnAround() - bList.get(i).getExecution());
+
+            twt += bList.get(i).getWaiting();
+            tta += bList.get(i).getTurnAround();
+        }
+
     }
 
     public void report()
     {
         // OFFICIAL OUTPUT
-        Collections.sort(SPNList, new sortByProcessId());
+        Collections.sort(bList, new sortByProcessId());
 
         // printing results
         System.out.println("Process\tTurnaround Time\tWaiting Time");
-        for(int  i = 0 ; i< listSize;  i++)
+        for(int  i = 0 ; i< bList.size();  i++)
 		{
-			System.out.println(SPNList.get(i).getId() + "\t" + SPNList.get(i).getTurnAround() + "\t\t" + SPNList.get(i).getWaiting() ) ;
+			System.out.println(bList.get(i).getId() + "\t" + bList.get(i).getTurnAround() + "\t\t" + bList.get(i).getWaiting() ) ;
         }
 
         System.out.println();
@@ -107,9 +102,10 @@ public class SPN {
 
     public void results()
     {
-        for(int i = 0; i < listSize; i++)
+        Collections.sort(bList, new sortByStartsAt());
+        for(int i = 0; i < bList.size(); i++)
         {
-            System.out.println("T" + SPNList.get(i).getWaiting() + ": " + SPNList.get(i).getId() + "(" + SPNList.get(i).getPriority() + ")");
+            System.out.println("T" + bList.get(i).getStartsAt() + ": " + bList.get(i).getId() + "(" + bList.get(i).getPriority() + ")");
         }
 
         System.out.println();
@@ -138,22 +134,4 @@ public class SPN {
         return processList;
     }
 
-    //HELPFUL VIDEO
-    //https://www.youtube.com/watch?v=e1nee-bE5FA
-
-    /*
-        SPN:
-        T1: p1(4)
-        T12: p2(2)
-        T14: p4(3)
-        T16: p3(3)
-        T19: p5(1)
-
-        Process Turnaround Time Waiting Time
-        p1      11              1
-        p2      11              10
-        p3      12              10
-        p4      5               4
-        p5      10              5
-    */
 }
