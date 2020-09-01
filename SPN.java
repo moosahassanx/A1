@@ -6,9 +6,8 @@ public class SPN {
     // attributes
     private double twt;   // total waiting time
     private double tta;   // total turn aroudn time
-
-    private ArrayList<Process> SPNList;
-    private ArrayList<Process> bList;
+    private ArrayList<Process> SPNList;     // cloned arraylist
+    private ArrayList<Process> bList;       // arraylist to add
 
     // constructor
     public SPN() {
@@ -21,6 +20,7 @@ public class SPN {
     // method
     public void feedProcess(ArrayList<Process> ogList, int dTime)
     {
+        // deep element arraylisting cloning
         for(int i = 0; i < ogList.size(); i++)
         {
             this.SPNList.add(ogList.get(i));
@@ -34,12 +34,25 @@ public class SPN {
         while(c < SPNList.size())
         {
             // first iteration
-            if(c == 0){
-                SPNList.get(c).setStartsAt(dTime);
-                SPNList.get(c).setCompletion(dTime + SPNList.get(c).getArrive() + SPNList.get(c).getExecution());
-                SPNList.get(c).setFlag(true);
-                cpuWatch = SPNList.get(c).getCompletion();
-                this.bList.add(SPNList.get(c));
+            if(c == 0)
+            {
+                // selecting the first process
+                sortExecution(SPNList);
+                ArrayList<Process> firstMini = new ArrayList<Process>();
+                for(int i = 0; i < SPNList.size(); i++)
+                {
+                    if((SPNList.get(i).getArrive() <= cpuWatch) && SPNList.get(i).getFlagged() == false)
+                    {
+                        firstMini.add(SPNList.get(i));
+                    }
+                }
+
+                // calculations
+                firstMini.get(0).setStartsAt(dTime);
+                firstMini.get(0).setCompletion(dTime + firstMini.get(0).getArrive() + firstMini.get(0).getExecution());
+                firstMini.get(0).setFlag(true);
+                cpuWatch = firstMini.get(0).getCompletion();
+                bList.add(firstMini.get(0));
                 c++;
             }
 
