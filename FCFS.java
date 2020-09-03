@@ -1,3 +1,11 @@
+// TITLE: 					Assignment1
+// COURSE: 					COMP2240
+// AUTHOR: 					Moosa Hassan
+// STUDENT NUMBER: 			3331532 
+// DATE: 					13/09/2020 
+// DESCRIPTION: 			Calculations and printing results for FCFS algorithm. Contains most comparable classes too.
+
+// importing java packages
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
