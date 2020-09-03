@@ -25,9 +25,7 @@ class A1
 
                 // read BEGIN
                 if(newText.equals("BEGIN"))
-                {
-                    // System.out.println("BEGIN");
-                    
+                {                    
                     newText = file.next();
 
                     // read END
@@ -135,13 +133,13 @@ class A1
         Preemptive.feedProcess(PPList, dTime);
 
         // printing results  
-        System.out.println("FCFS:");
-        FirstCome.results();
-        FirstCome.report();
+        //System.out.println("FCFS:");
+        //FirstCome.results();
+        //FirstCome.report();
 
-        System.out.println("SPN:");
-        ShortProcess.results();
-        ShortProcess.report();
+        //System.out.println("SPN:");
+        //ShortProcess.results();
+        //ShortProcess.report();
 
         System.out.println("PP:");
         Preemptive.results();
@@ -151,8 +149,8 @@ class A1
         // final summary
         System.out.println("Summary:");
         System.out.println("Algorithm\tAverage Turnaround Time\tAverage Waiting Time");
-        System.out.println("FCFS: \t\t" + FirstCome.getAverageTurnaroundTime() + "\t\t\t" + FirstCome.getAverageWaitingTime());     // FCFS
-        System.out.println("SPN: \t\t" + ShortProcess.getAverageTurnaroundTime() + "\t\t\t" + ShortProcess.getAverageWaitingTime() );  // SPN
+        //System.out.println("FCFS: \t\t" + FirstCome.getAverageTurnaroundTime() + "\t\t\t" + FirstCome.getAverageWaitingTime());     // FCFS
+        //System.out.println("SPN: \t\t" + ShortProcess.getAverageTurnaroundTime() + "\t\t\t" + ShortProcess.getAverageWaitingTime() );  // SPN
         System.out.println("PP: \t\t" + Preemptive.getAverageTurnaroundTime() + "\t\t\t" + Preemptive.getAverageWaitingTime());     // PP
     }
 }
