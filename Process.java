@@ -11,6 +11,8 @@ public class Process
     private int priority;
     private boolean isProcessed;
     private int startsAt;
+    private int status;     // 0 = NOT STARTED,     1 = RUNNING,    2 = FINISHED, 3 = PAUSED
+    private int runningTime;
 
     // constructors
     public Process()
@@ -25,6 +27,8 @@ public class Process
         this.completion = 0;
         this.isProcessed = false;
         this.startsAt = 0;
+        this.status = 0;
+        this.runningTime = 0;
     }
     public Process(String pID, int a, int e, int p)
     {
@@ -39,6 +43,8 @@ public class Process
         this.completion = 0;
         this.isProcessed = false;
         this.startsAt = 0;
+        this.status = 0;
+        this.runningTime = 0;
     }
 
     // mutators
@@ -94,6 +100,20 @@ public class Process
         this.startsAt = s;
     }
 
+    public void setStatus(int s)
+    {
+        this.status = s;
+    }
+
+    public void setRunningTime(int r)
+    {
+        this.runningTime = r;
+    }
+    public void iterateRun()
+    {
+        this.runningTime++;
+    }
+
     // accessors
     public String getId()
     {
@@ -144,6 +164,16 @@ public class Process
         return this.startsAt;
     }
 
+    public int getStatus()
+    {
+        return this.status;
+    }
+
+    public int getRunningTime()
+    {
+        return this.runningTime;
+    }
+
     // deep element cloning
     @Override
     protected Object clone() throws CloneNotSupportedException {
@@ -157,5 +187,22 @@ public class Process
             throw new RuntimeException(e);
         }
         return clone;
+    }
+
+    // returning status as string
+    public String getStatusLine()
+    {
+        if(this.status == 0)
+        {
+            return "NOT STARTED";
+        }
+        else if(this.status == 1)
+        {
+            return "RUNNING";
+        }
+        else
+        {
+            return "FINISHED1";
+        }
     }
 }
