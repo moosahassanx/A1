@@ -27,6 +27,22 @@ public class PP
         }
         Collections.sort(PPList, new sortByArrival());
 
+        // creating arraylist track for each process
+        ArrayList<Process> aList = new ArrayList<Process>();
+        ArrayList<Process> bList = new ArrayList<Process>();
+        ArrayList<Process> cList = new ArrayList<Process>();
+        ArrayList<Process> dList = new ArrayList<Process>();
+        ArrayList<Process> eList = new ArrayList<Process>();
+
+        // inserting 1 process for every arraylist
+        aList.add(PPList.get(0));
+        bList.add(PPList.get(1));
+        cList.add(PPList.get(2));
+        dList.add(PPList.get(3));
+        eList.add(PPList.get(4));
+
+        PPList.get(0);
+
         int cpuWatch = 0;
         ArrayList<Process> compMini = new ArrayList<Process>();
         sortArrive(PPList);
@@ -37,7 +53,15 @@ public class PP
 
             for(int i = 0; i < PPList.size(); i++)
             {
-                //
+                if((PPList.get(i).getArrive() <= cpuWatch) && (PPList.get(i).getFlagged() == false))
+                {
+                    compMini.add(PPList.get(i));
+                }
+            }
+
+            for(int i = 0; i < compMini.size(); i++)
+            {
+                System.out.println(compMini.get(i).getId());
             }
 
             cpuWatch++;
