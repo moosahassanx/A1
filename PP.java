@@ -17,7 +17,7 @@ public class PP
         this.twt = 0;
         this.tta = 0;
     }
-
+    
     public void feedProcess(ArrayList<Process> ogList, int dTime)
     {
         // deep element arraylist cloning
@@ -31,6 +31,20 @@ public class PP
         ArrayList<Process> compMini = new ArrayList<Process>();
         sortArrive(PPList);
 
+        while(cpuWatch != 30)
+        {
+            System.out.println("cpuWatch: " + cpuWatch);
+
+            for(int i = 0; i < PPList.size(); i++)
+            {
+                //
+            }
+
+            cpuWatch++;
+        }
+
+
+        /*
         while(cpuWatch != 100)
         {
             System.out.println("CPUWATCH: " + cpuWatch);
@@ -98,6 +112,7 @@ public class PP
 
             cpuWatch++;
         }
+        */
 
         /*
         // this loop breaks only if ALL processes are marked as complete
@@ -220,7 +235,7 @@ public class PP
     // start time | process id | process priority
     public void results()
     {
-        Collections.sort(PPList, new sortByStartsAt());
+        sortStartsAt(PPList);
         for(int i = 0; i < PPList.size(); i++)
         {
             System.out.println("T" + PPList.get(i).getStartsAt() + ": " + PPList.get(i).getId() + "(" + PPList.get(i).getPriority() + ")");
@@ -263,6 +278,14 @@ public class PP
     {
         Collections.sort(processList, Comparator.comparing(Process::getArrive)
             .thenComparing(Process::getArrive));
+        return processList;
+    }
+
+    // sorting in accordance to startsAt
+    public ArrayList<Process> sortStartsAt(ArrayList<Process> processList)
+    {
+        Collections.sort(processList, Comparator.comparing(Process::getStartsAt)
+            .thenComparing(Process::getStartsAt));
         return processList;
     }
 
