@@ -11,7 +11,7 @@ public class Process
     private int priority;
     private boolean isProcessed;
     private int startsAt;
-    private int status;     // 0 = NOT STARTED,     1 = RUNNING,    2 = FINISHED, 3 = PAUSED
+    private int status;     // 0 = NOT STARTED,     1 = RUNNING,    2 = PAUSED,     3 = FINISHED
     private int runningTime;
 
     // constructors
@@ -200,9 +200,13 @@ public class Process
         {
             return "RUNNING";
         }
+        else if(this.status == 2)
+        {
+            return "PAUSED";
+        }
         else
         {
-            return "FINISHED1";
+            return "FINISHED";
         }
     }
 }

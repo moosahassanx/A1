@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.PriorityQueue;
 
 public class PP
 {
@@ -27,7 +28,78 @@ public class PP
         Collections.sort(PPList, new sortByArrival());
 
         int cpuWatch = 0;
+        ArrayList<Process> compMini = new ArrayList<Process>();
+        sortArrive(PPList);
 
+        while(cpuWatch != 100)
+        {
+            System.out.println("CPUWATCH: " + cpuWatch);
+
+            // search for newly arrived processes
+            for(int i = 0; i < PPList.size(); i++)
+            {
+                if((PPList.get(i).getArrive() <= cpuWatch) && PPList.get(i).getStatus() == 0)
+                {
+                    compMini.add(PPList.get(i));
+                }
+            }
+
+            // a process has arrived
+            if(compMini.size() == 1)
+            {
+                // start process execution
+                compMini.get(0).setStartsAt(dTime + cpuWatch);
+                compMini.get(0).iterateRun();
+                compMini.get(0).setStatus(1);
+                pList.add(compMini.get(0));
+                cpuWatch++;
+            }
+            else if(compMini.size() > 1)
+            {
+                // compare processes
+                Collections.sort(compMini, new sortByPriority());
+
+                if(compMini.get(0).getId() != pList.get(0).getId())
+                {
+                    // start process execution
+                    pList.get(0).setStatus(2);
+                    compMini.get(0).setStartsAt(dTime + cpuWatch);
+                    compMini.get(0).iterateRun();
+
+                    if(compMini.get(0).getRunningTime() == compMini.get(0).getExecution())
+                    {
+                        compMini.get(0).setStatus(3);
+                        pList.add(compMini.get(0));
+                        compMini.remove(0);
+                    }
+                    else
+                    {
+                        compMini.get(0).setStatus(1);
+                        pList.add(compMini.get(0));
+                    }
+                    
+                    cpuWatch++;
+                }
+            }
+
+            System.out.print("Processes in pList: ");
+            for(int i = 0; i < compMini.size(); i++)
+            {
+                System.out.print(compMini.get(i).getId() + "\t");
+            }
+            System.out.println();
+
+            System.out.println("id\tarrive\trun\texec\tcomplet\tstarts\tturnAr\twaiting\tstatus");
+            for(int i = 0; i < pList.size(); i++)
+            {
+                System.out.println(pList.get(i).getId() + "\t" + pList.get(i).getArrive() + "\t" + pList.get(i).getRunningTime() + "\t" + pList.get(i).getExecution() + "\t" + pList.get(i).getCompletion() + "\t" + pList.get(i).getStartsAt() + "\t" + pList.get(i).getTurnAround() + "\t" + pList.get(i).getWaiting() + "\t" +pList.get(i).getStatusLine());
+            }
+            System.out.println("********************************************************************************");
+
+            cpuWatch++;
+        }
+
+        /*
         // this loop breaks only if ALL processes are marked as complete
         ArrayList<Process> compMini = new ArrayList<Process>();
         while(isComplete() == false)
@@ -72,6 +144,7 @@ public class PP
 
             else
             {
+                // no other process exists
                 if(compMini.size() == 0)
                 {
                     Collections.sort(pList, new sortByStatus());
@@ -82,9 +155,22 @@ public class PP
                         pList.get(0).setStatus(2);
                     }
                 }
+
+                // theres a process that needs addressing
                 else
                 {
-                    System.out.println(compMini.get(0).getId());
+                    // switch up processes
+                    if(compMini.get(0).getPriority() < pList.get(0).getPriority())
+                    {
+                        pList.get(0).setStatus(3);
+                        
+                        System.out.println(compMini.get(0).getId());
+                        compMini.get(0).setStartsAt(dTime + cpuWatch);
+                        pList.add(compMini.get(0));
+                        compMini.get(0).setStatus(1);
+
+                        compMini.clear();
+                    }
                 }
 
                 // selecting next process
@@ -95,6 +181,8 @@ public class PP
                         compMini.add(PPList.get(i));
                     }
                 }
+
+                cpuWatch++;
             }
 
             System.out.println("PARTY LIST");
@@ -103,9 +191,9 @@ public class PP
             {
                 System.out.println(pList.get(i).getId() + "\t" + pList.get(i).getArrive() + "\t" + pList.get(i).getRunningTime() + "\t" + pList.get(i).getExecution() + "\t" + pList.get(i).getCompletion() + "\t" + pList.get(i).getStartsAt() + "\t" + pList.get(i).getTurnAround() + "\t" + pList.get(i).getWaiting() + "\t" +pList.get(i).getStatusLine());
             }
-
             System.out.println("********************************************************************************");
         }
+        */
 
     }
 
@@ -186,6 +274,15 @@ class sortByStatus implements Comparator<Process>
     public int compare(Process o1, Process o2)
     {
         return o1.getStatus() - o2.getStatus();
+    }
+}
+
+// sorting in terms of priority
+class sortByPriority implements Comparator<Process>
+{
+    public int compare(Process o1, Process o2)
+    {
+        return o1.getPriority() - o2.getPriority();
     }
 }
 
