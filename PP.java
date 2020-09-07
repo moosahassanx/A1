@@ -28,9 +28,6 @@ public class PP
         }
         Collections.sort(PPList, new sortByArrival());
 
-        // arraylist to store strings
-        PPList.get(0);
-
         int cpuWatch = 0;
         ArrayList<Process> compMini = new ArrayList<Process>();
         sortArrive(PPList);
@@ -57,10 +54,37 @@ public class PP
 
             // running the processes
             Collections.sort(compMini, new sortByPriority());
-            
-            compMini.get(0).iterateRun();
+
+            // NOT STARTED
+            if(compMini.get(0).getStatus() == 0)
+            {
+                compMini.get(0).setStatus(1);
+                compMini.get(0).setStartsAt(dTime + cpuWatch);
+                compMini.get(0).iterateRun();
+                cpuWatch += dTime;
+
+                if(cProcess != null)
+                {
+                    cProcess.setStatus(2);
+                }
+            }
+            // RUNNING
+            else if(compMini.get(0).getStatus() == 1)
+            {
+                compMini.get(0).iterateRun();
+            }
+            // PAUSED
+            else if(compMini.get(0).getStatus() == 2)
+            {
+                compMini.get(0).setStartsAt(dTime + cpuWatch);
+                compMini.get(0).iterateRun();
+                compMini.get(0).setStatus(1);
+                cpuWatch += dTime;
+            }
+
             if(compMini.get(0).getRunningTime() == compMini.get(0).getExecution())
             {
+                compMini.get(0).setStatus(3);
                 PPList.remove(compMini.get(0));
             }
 
@@ -80,12 +104,13 @@ public class PP
             else if(cProcess != compMini.get(0))
             {
                 cProcess = compMini.get(0);
-                cpuWatch += dTime;
             }
             
             compMini.clear();
             cpuWatch++;
         }
+
+        System.out.println("FINAL CPUWATCH: " + cpuWatch);
     }
 
     // mark as incomplete if ANY process is yet to be processed
