@@ -7,6 +7,7 @@ public class PP
 {
     private ArrayList<Process> PPList;
     private ArrayList<Process> pList;
+    private ArrayList<String> report;
     private int twt;        // total waiting time
     private int tta;        // total turnaround time
 
@@ -27,213 +28,64 @@ public class PP
         }
         Collections.sort(PPList, new sortByArrival());
 
-        // creating arraylist track for each process
-        ArrayList<Process> aList = new ArrayList<Process>();
-        ArrayList<Process> bList = new ArrayList<Process>();
-        ArrayList<Process> cList = new ArrayList<Process>();
-        ArrayList<Process> dList = new ArrayList<Process>();
-        ArrayList<Process> eList = new ArrayList<Process>();
-
-        // inserting 1 process for every arraylist
-        aList.add(PPList.get(0));
-        bList.add(PPList.get(1));
-        cList.add(PPList.get(2));
-        dList.add(PPList.get(3));
-        eList.add(PPList.get(4));
-
+        // arraylist to store strings
         PPList.get(0);
 
         int cpuWatch = 0;
         ArrayList<Process> compMini = new ArrayList<Process>();
         sortArrive(PPList);
+        Process cProcess = null;
 
-        while(cpuWatch != 30)
+        while(PPList.size() > 0)
         {
             System.out.println("cpuWatch: " + cpuWatch);
 
+            // getting qualified processes
             for(int i = 0; i < PPList.size(); i++)
             {
-                if((PPList.get(i).getArrive() <= cpuWatch) && (PPList.get(i).getFlagged() == false))
+                if((PPList.get(i).getArrive() <= cpuWatch) && (PPList.get(i).getStatus() != 3))
                 {
                     compMini.add(PPList.get(i));
                 }
             }
 
-            for(int i = 0; i < compMini.size(); i++)
+            if(compMini.size() == 0)
             {
-                System.out.println(compMini.get(i).getId());
-            }
-
-            cpuWatch++;
-        }
-
-
-        /*
-        while(cpuWatch != 100)
-        {
-            System.out.println("CPUWATCH: " + cpuWatch);
-
-            // search for newly arrived processes
-            for(int i = 0; i < PPList.size(); i++)
-            {
-                if((PPList.get(i).getArrive() <= cpuWatch) && PPList.get(i).getStatus() == 0)
-                {
-                    compMini.add(PPList.get(i));
-                }
-            }
-
-            // a process has arrived
-            if(compMini.size() == 1)
-            {
-                // start process execution
-                compMini.get(0).setStartsAt(dTime + cpuWatch);
-                compMini.get(0).iterateRun();
-                compMini.get(0).setStatus(1);
-                pList.add(compMini.get(0));
                 cpuWatch++;
+                continue;
             }
-            else if(compMini.size() > 1)
+
+            // running the processes
+            Collections.sort(compMini, new sortByPriority());
+            
+            compMini.get(0).iterateRun();
+            if(compMini.get(0).getRunningTime() == compMini.get(0).getExecution())
             {
-                // compare processes
-                Collections.sort(compMini, new sortByPriority());
-
-                if(compMini.get(0).getId() != pList.get(0).getId())
-                {
-                    // start process execution
-                    pList.get(0).setStatus(2);
-                    compMini.get(0).setStartsAt(dTime + cpuWatch);
-                    compMini.get(0).iterateRun();
-
-                    if(compMini.get(0).getRunningTime() == compMini.get(0).getExecution())
-                    {
-                        compMini.get(0).setStatus(3);
-                        pList.add(compMini.get(0));
-                        compMini.remove(0);
-                    }
-                    else
-                    {
-                        compMini.get(0).setStatus(1);
-                        pList.add(compMini.get(0));
-                    }
-                    
-                    cpuWatch++;
-                }
+                PPList.remove(compMini.get(0));
             }
 
-            System.out.print("Processes in pList: ");
+            // TESTING
+            System.out.println("id\tarrive\trun\texec\tcomplet\tstarts\tturnAr\twaiting\tstatus");
             for(int i = 0; i < compMini.size(); i++)
             {
-                System.out.print(compMini.get(i).getId() + "\t");
-            }
-            System.out.println();
-
-            System.out.println("id\tarrive\trun\texec\tcomplet\tstarts\tturnAr\twaiting\tstatus");
-            for(int i = 0; i < pList.size(); i++)
-            {
-                System.out.println(pList.get(i).getId() + "\t" + pList.get(i).getArrive() + "\t" + pList.get(i).getRunningTime() + "\t" + pList.get(i).getExecution() + "\t" + pList.get(i).getCompletion() + "\t" + pList.get(i).getStartsAt() + "\t" + pList.get(i).getTurnAround() + "\t" + pList.get(i).getWaiting() + "\t" +pList.get(i).getStatusLine());
+                System.out.println(compMini.get(i).getId() + "(" + compMini.get(i).getPriority() + ")" + "\t" + compMini.get(i).getArrive() + "\t" + compMini.get(i).getRunningTime() + "\t" + compMini.get(i).getExecution() + "\t" + compMini.get(i).getCompletion() + "\t" + compMini.get(i).getStartsAt() + "\t" + compMini.get(i).getTurnAround() + "\t" + compMini.get(i).getWaiting() + "\t" +compMini.get(i).getStatusLine());
             }
             System.out.println("********************************************************************************");
 
+            // selecting current process for next loop
+            if(cProcess == null)
+            {
+                cProcess = compMini.get(0);
+            }
+            else if(cProcess != compMini.get(0))
+            {
+                cProcess = compMini.get(0);
+                cpuWatch += dTime;
+            }
+            
+            compMini.clear();
             cpuWatch++;
         }
-        */
-
-        /*
-        // this loop breaks only if ALL processes are marked as complete
-        ArrayList<Process> compMini = new ArrayList<Process>();
-        while(isComplete() == false)
-        {
-            System.out.println("cpuWatch: " + cpuWatch);
-
-            if(cpuWatch == 0)
-            {
-                // selecting the first process
-                sortArrive(PPList);
-                for(int i = 0; i < PPList.size(); i++)
-                {
-                    if((PPList.get(i).getArrive() <= cpuWatch) && PPList.get(i).getFlagged() == false)
-                    {
-                        compMini.add(PPList.get(i));
-                    }
-                }
-                cpuWatch++;
-            }
-
-            else if(cpuWatch == 1)
-            {
-                System.out.println(compMini.get(0).getId());
-                compMini.get(0).setStartsAt(cpuWatch);
-                compMini.get(0).setStatus(1);
-                compMini.get(0).iterateRun();
-
-                pList.add(compMini.get(0));
-                cpuWatch++;
-
-                compMini.clear();
-
-                // selecting next process
-                for(int i = 0; i < PPList.size(); i++)
-                {
-                    if((PPList.get(i).getArrive() <= cpuWatch) && PPList.get(i).getStatus() == 0)
-                    {
-                        compMini.add(PPList.get(i));
-                    }
-                }
-            }
-
-            else
-            {
-                // no other process exists
-                if(compMini.size() == 0)
-                {
-                    Collections.sort(pList, new sortByStatus());
-                    pList.get(0).iterateRun();
-
-                    if(pList.get(0).getRunningTime() == pList.get(0).getExecution())
-                    {
-                        pList.get(0).setStatus(2);
-                    }
-                }
-
-                // theres a process that needs addressing
-                else
-                {
-                    // switch up processes
-                    if(compMini.get(0).getPriority() < pList.get(0).getPriority())
-                    {
-                        pList.get(0).setStatus(3);
-                        
-                        System.out.println(compMini.get(0).getId());
-                        compMini.get(0).setStartsAt(dTime + cpuWatch);
-                        pList.add(compMini.get(0));
-                        compMini.get(0).setStatus(1);
-
-                        compMini.clear();
-                    }
-                }
-
-                // selecting next process
-                for(int i = 0; i < PPList.size(); i++)
-                {
-                    if((PPList.get(i).getArrive() <= cpuWatch) && PPList.get(i).getStatus() == 0)
-                    {
-                        compMini.add(PPList.get(i));
-                    }
-                }
-
-                cpuWatch++;
-            }
-
-            System.out.println("PARTY LIST");
-            System.out.println("id\tarrive\trun\texec\tcomplet\tstarts\tturnAr\twaiting\tstatus");
-            for(int i = 0; i < pList.size(); i++)
-            {
-                System.out.println(pList.get(i).getId() + "\t" + pList.get(i).getArrive() + "\t" + pList.get(i).getRunningTime() + "\t" + pList.get(i).getExecution() + "\t" + pList.get(i).getCompletion() + "\t" + pList.get(i).getStartsAt() + "\t" + pList.get(i).getTurnAround() + "\t" + pList.get(i).getWaiting() + "\t" +pList.get(i).getStatusLine());
-            }
-            System.out.println("********************************************************************************");
-        }
-        */
-
     }
 
     // mark as incomplete if ANY process is yet to be processed
@@ -274,7 +126,7 @@ public class PP
         System.out.println("Process\tTurnaround Time\tWaiting Time");
         for(int  i = 0 ; i< PPList.size();  i++)
         {
-            System.out.println(PPList.get(i).getId() + "\t" + PPList.get(i).getTurnAround() + "\t\t" + PPList.get(i).getWaiting() ) ;
+            System.out.println(PPList.get(i).getId() + "\t" + PPList.get(i).getTurnAround() + "\t\t" + PPList.get(i).getWaiting() );
         }
         System.out.println();
     }
