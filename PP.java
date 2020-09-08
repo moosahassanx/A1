@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 public class PP
 {
     private ArrayList<Process> PPList;
-    private ArrayList<Process> pList;
+    private ArrayList<String> tList;
     private ArrayList<String> report;
     private int twt;        // total waiting time
     private int tta;        // total turnaround time
@@ -14,7 +14,7 @@ public class PP
     public PP()
     {
         this.PPList = new ArrayList<Process>();
-        this.pList = new ArrayList<Process>();
+        this.tList = new ArrayList<String>();
         this.twt = 0;
         this.tta = 0;
     }
@@ -67,11 +67,51 @@ public class PP
                 {
                     cProcess.setStatus(2);
                 }
+
+                // getting next qualified processes
+                ArrayList<Process> compMini2 = new ArrayList<Process>();
+                int cpuWatch2 = cpuWatch++;
+                for(int i = 0; i < PPList.size(); i++)
+                {
+                    if((PPList.get(i).getArrive() <= cpuWatch2) && (PPList.get(i).getStatus() != 3))
+                    {
+                        compMini2.add(PPList.get(i));
+                    }
+                }
+                Collections.sort(compMini2, new sortByPriority());
+
+                // comparing to next qualified process
+                if(compMini.get(0) != compMini2.get(0))
+                {
+                    String feedResult = "T" + compMini.get(0).getStartsAt() + ": " + compMini.get(0).getId() + "(" + compMini.get(0).getPriority() + ")";
+                    tList.add(feedResult);
+                }
+
+
             }
             // RUNNING
             else if(compMini.get(0).getStatus() == 1)
             {
                 compMini.get(0).iterateRun();
+
+                // getting next qualified processes
+                ArrayList<Process> compMini2 = new ArrayList<Process>();
+                int cpuWatch2 = cpuWatch++;
+                for(int i = 0; i < PPList.size(); i++)
+                {
+                    if((PPList.get(i).getArrive() <= cpuWatch2) && (PPList.get(i).getStatus() != 3))
+                    {
+                        compMini2.add(PPList.get(i));
+                    }
+                }
+                Collections.sort(compMini2, new sortByPriority());
+
+                // comparing to next qualified process
+                if(compMini.get(0) != compMini2.get(0))
+                {
+                    String feedResult = "T" + compMini.get(0).getStartsAt() + ": " + compMini.get(0).getId() + "(" + compMini.get(0).getPriority() + ")";
+                    tList.add(feedResult);
+                }
             }
             // PAUSED
             else if(compMini.get(0).getStatus() == 2)
@@ -80,8 +120,28 @@ public class PP
                 compMini.get(0).iterateRun();
                 compMini.get(0).setStatus(1);
                 cpuWatch += dTime;
+
+                // getting next qualified processes
+                ArrayList<Process> compMini2 = new ArrayList<Process>();
+                int cpuWatch2 = cpuWatch++;
+                for(int i = 0; i < PPList.size(); i++)
+                {
+                    if((PPList.get(i).getArrive() <= cpuWatch2) && (PPList.get(i).getStatus() != 3))
+                    {
+                        compMini2.add(PPList.get(i));
+                    }
+                }
+                Collections.sort(compMini2, new sortByPriority());
+
+                // comparing to next qualified process
+                if(compMini.get(0) != compMini2.get(0))
+                {
+                    String feedResult = "T" + compMini.get(0).getStartsAt() + ": " + compMini.get(0).getId() + "(" + compMini.get(0).getPriority() + ")";
+                    tList.add(feedResult);
+                }
             }
 
+            // FINISHED
             if(compMini.get(0).getRunningTime() == compMini.get(0).getExecution())
             {
                 compMini.get(0).setStatus(3);
@@ -136,10 +196,9 @@ public class PP
     // start time | process id | process priority
     public void results()
     {
-        sortStartsAt(PPList);
-        for(int i = 0; i < PPList.size(); i++)
+        for(int i = 0; i < tList.size(); i++)
         {
-            System.out.println("T" + PPList.get(i).getStartsAt() + ": " + PPList.get(i).getId() + "(" + PPList.get(i).getPriority() + ")");
+            System.out.println(tList.get(i));
         }
         System.out.println();
     }
@@ -209,14 +268,3 @@ class sortByPriority implements Comparator<Process>
         return o1.getPriority() - o2.getPriority();
     }
 }
-
-/* COPY THIS FOR TESTING
-    System.out.println("id\tarrive\texec\tcomplet\tstarts\tturnAr\twaiting");
-    for(int i = 0; i < bList.size(); i++)
-    {
-        System.out.println(bList.get(i).getId() + "\t" + bList.get(i).getArrive() + "\t" + bList.get(i).getExecution() + "\t" + bList.get(i).getCompletion() + "\t" + bList.get(i).getStartsAt() + "\t" + bList.get(i).getTurnAround() + "\t" + bList.get(i).getWaiting());
-    }
-*/
-
-// https://www.javatpoint.com/os-preemptive-priority-scheduling
-// https://www.codingalpha.com/preemptive-priority-scheduling-algorithm-c-program/
