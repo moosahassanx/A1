@@ -143,7 +143,7 @@ class A1
 
         System.out.println("PP:");
         Preemptive.results();
-        //Preemptive.report();
+        Preemptive.report();
 
 
         // final summary
@@ -151,6 +151,6 @@ class A1
         System.out.println("Algorithm\tAverage Turnaround Time\tAverage Waiting Time");
         //System.out.println("FCFS: \t\t" + FirstCome.getAverageTurnaroundTime() + "\t\t\t" + FirstCome.getAverageWaitingTime());     // FCFS
         //System.out.println("SPN: \t\t" + ShortProcess.getAverageTurnaroundTime() + "\t\t\t" + ShortProcess.getAverageWaitingTime() );  // SPN
-        //System.out.println("PP: \t\t" + Preemptive.getAverageTurnaroundTime() + "\t\t\t" + Preemptive.getAverageWaitingTime());     // PP
+        System.out.println("PP: \t\t" + Preemptive.getAverageTurnaroundTime() + "\t\t\t" + Preemptive.getAverageWaitingTime());     // PP
     }
 }

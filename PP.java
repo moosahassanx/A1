@@ -1,13 +1,12 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.PriorityQueue;
 
 public class PP
 {
     private ArrayList<Process> PPList;
     private ArrayList<String> tList;
-    private ArrayList<String> report;
+    private ArrayList<Process> fList;
     private int twt;        // total waiting time
     private int tta;        // total turnaround time
 
@@ -15,6 +14,7 @@ public class PP
     {
         this.PPList = new ArrayList<Process>();
         this.tList = new ArrayList<String>();
+        this.fList = new ArrayList<Process>();
         this.twt = 0;
         this.tta = 0;
     }
@@ -35,7 +35,7 @@ public class PP
 
         while(PPList.size() > 0)
         {
-            System.out.println("cpuWatch: " + cpuWatch);
+            //System.out.println("cpuWatch: " + cpuWatch);
 
             // getting qualified processes
             for(int i = 0; i < PPList.size(); i++)
@@ -60,58 +60,26 @@ public class PP
             {
                 compMini.get(0).setStatus(1);
                 compMini.get(0).setStartsAt(dTime + cpuWatch);
+                compMini.get(0).setOGStart(dTime + cpuWatch);
                 compMini.get(0).iterateRun();
                 cpuWatch += dTime;
+
+                if(tList.size() == 0)
+                {
+                    String feed = "T" + compMini.get(0).getStartsAt() + ": " + compMini.get(0).getId() + "(" + compMini.get(0).getPriority() + ")";
+                    tList.add(feed);
+                }
 
                 if(cProcess != null)
                 {
                     cProcess.setStatus(2);
                 }
 
-                // getting next qualified processes
-                ArrayList<Process> compMini2 = new ArrayList<Process>();
-                int cpuWatch2 = cpuWatch++;
-                for(int i = 0; i < PPList.size(); i++)
-                {
-                    if((PPList.get(i).getArrive() <= cpuWatch2) && (PPList.get(i).getStatus() != 3))
-                    {
-                        compMini2.add(PPList.get(i));
-                    }
-                }
-                Collections.sort(compMini2, new sortByPriority());
-
-                // comparing to next qualified process
-                if(compMini.get(0) != compMini2.get(0))
-                {
-                    String feedResult = "T" + compMini.get(0).getStartsAt() + ": " + compMini.get(0).getId() + "(" + compMini.get(0).getPriority() + ")";
-                    tList.add(feedResult);
-                }
-
-
             }
             // RUNNING
             else if(compMini.get(0).getStatus() == 1)
             {
                 compMini.get(0).iterateRun();
-
-                // getting next qualified processes
-                ArrayList<Process> compMini2 = new ArrayList<Process>();
-                int cpuWatch2 = cpuWatch++;
-                for(int i = 0; i < PPList.size(); i++)
-                {
-                    if((PPList.get(i).getArrive() <= cpuWatch2) && (PPList.get(i).getStatus() != 3))
-                    {
-                        compMini2.add(PPList.get(i));
-                    }
-                }
-                Collections.sort(compMini2, new sortByPriority());
-
-                // comparing to next qualified process
-                if(compMini.get(0) != compMini2.get(0))
-                {
-                    String feedResult = "T" + compMini.get(0).getStartsAt() + ": " + compMini.get(0).getId() + "(" + compMini.get(0).getPriority() + ")";
-                    tList.add(feedResult);
-                }
             }
             // PAUSED
             else if(compMini.get(0).getStatus() == 2)
@@ -120,43 +88,18 @@ public class PP
                 compMini.get(0).iterateRun();
                 compMini.get(0).setStatus(1);
                 cpuWatch += dTime;
-
-                // getting next qualified processes
-                ArrayList<Process> compMini2 = new ArrayList<Process>();
-                int cpuWatch2 = cpuWatch++;
-                for(int i = 0; i < PPList.size(); i++)
-                {
-                    if((PPList.get(i).getArrive() <= cpuWatch2) && (PPList.get(i).getStatus() != 3))
-                    {
-                        compMini2.add(PPList.get(i));
-                    }
-                }
-                Collections.sort(compMini2, new sortByPriority());
-
-                // comparing to next qualified process
-                if(compMini.get(0) != compMini2.get(0))
-                {
-                    String feedResult = "T" + compMini.get(0).getStartsAt() + ": " + compMini.get(0).getId() + "(" + compMini.get(0).getPriority() + ")";
-                    tList.add(feedResult);
-                }
             }
 
             // FINISHED
             if(compMini.get(0).getRunningTime() == compMini.get(0).getExecution())
             {
                 compMini.get(0).setStatus(3);
+                compMini.get(0).setCompletion(cpuWatch + compMini.get(0).getArrive());
+                fList.add(compMini.get(0));
                 PPList.remove(compMini.get(0));
             }
 
-            // TESTING
-            System.out.println("id\tarrive\trun\texec\tcomplet\tstarts\tturnAr\twaiting\tstatus");
-            for(int i = 0; i < compMini.size(); i++)
-            {
-                System.out.println(compMini.get(i).getId() + "(" + compMini.get(i).getPriority() + ")" + "\t" + compMini.get(i).getArrive() + "\t" + compMini.get(i).getRunningTime() + "\t" + compMini.get(i).getExecution() + "\t" + compMini.get(i).getCompletion() + "\t" + compMini.get(i).getStartsAt() + "\t" + compMini.get(i).getTurnAround() + "\t" + compMini.get(i).getWaiting() + "\t" +compMini.get(i).getStatusLine());
-            }
-            System.out.println("********************************************************************************");
-
-            // selecting current process for next loop
+            // selecting current process for next lot
             if(cProcess == null)
             {
                 cProcess = compMini.get(0);
@@ -164,6 +107,8 @@ public class PP
             else if(cProcess != compMini.get(0))
             {
                 cProcess = compMini.get(0);
+                String feed = "T" + cProcess.getStartsAt() + ": " + cProcess.getId() + "(" + cProcess.getPriority() + ")";
+                tList.add(feed);
             }
             
             compMini.clear();
@@ -171,7 +116,28 @@ public class PP
         }
 
         System.out.println("FINAL CPUWATCH: " + cpuWatch);
+        
+        Collections.sort(fList, new sortByProcessId());
+        for(int i = 0; i < fList.size(); i++)
+        {
+            // calculating turnaround/waiting times
+            fList.get(i).setTurnAround(fList.get(i).getCompletion() - fList.get(i).getArrive());
+            fList.get(i).setWaiting(fList.get(i).getTurnAround() - fList.get(i).getExecution());
+
+            // accumulating total turnaround/waiting times
+            twt += fList.get(i).getWaiting();
+            tta += fList.get(i).getTurnAround();
+        }
+
+        // TESTING
+        System.out.println("id\tarrive\trun\texec\tcomplet\tstarts\tturnAr\twaiting\tstatus");
+        for(int i = 0; i < fList.size(); i++)
+        {
+            System.out.println(fList.get(i).getId() + "(" + fList.get(i).getPriority() + ")" + "\t" + fList.get(i).getArrive() + "\t" + fList.get(i).getRunningTime() + "\t" + fList.get(i).getExecution() + "\t" + fList.get(i).getCompletion() + "\t" + fList.get(i).getOGStart() + "\t" + fList.get(i).getTurnAround() + "\t" + fList.get(i).getWaiting() + "\t" + fList.get(i).getStatusLine());
+        }
+        System.out.println("********************************************************************************");
     }
+    
 
     // mark as incomplete if ANY process is yet to be processed
     public boolean isComplete()
@@ -206,11 +172,11 @@ public class PP
     // process id | turnaround time | waiting time
     public void report()
     {
-        Collections.sort(PPList, new sortByProcessId());
+        Collections.sort(fList, new sortByProcessId());
         System.out.println("Process\tTurnaround Time\tWaiting Time");
-        for(int  i = 0 ; i< PPList.size();  i++)
+        for(int  i = 0 ; i< fList.size();  i++)
         {
-            System.out.println(PPList.get(i).getId() + "\t" + PPList.get(i).getTurnAround() + "\t\t" + PPList.get(i).getWaiting() );
+            System.out.println(fList.get(i).getId() + "\t" + fList.get(i).getTurnAround() + "\t\t" + fList.get(i).getWaiting() );
         }
         System.out.println();
     }
@@ -218,11 +184,11 @@ public class PP
     // calculating averages
     public double getAverageWaitingTime()
     {
-        return this.twt / this.PPList.size();
+        return this.twt / this.fList.size();
     }
     public double getAverageTurnaroundTime()
     {
-        return this.tta / this.PPList.size();
+        return this.tta / this.fList.size();
     }
 
     // sorting in accordance to execution

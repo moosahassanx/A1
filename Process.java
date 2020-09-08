@@ -13,6 +13,7 @@ public class Process
     private int startsAt;
     private int status;     // 0 = NOT STARTED,     1 = RUNNING,    2 = PAUSED,     3 = FINISHED
     private int runningTime;
+    private int ogStart;
 
     // constructors
     public Process()
@@ -29,6 +30,7 @@ public class Process
         this.startsAt = 0;
         this.status = 0;
         this.runningTime = 0;
+        this.ogStart = 0;
     }
     public Process(String pID, int a, int e, int p)
     {
@@ -45,6 +47,7 @@ public class Process
         this.startsAt = 0;
         this.status = 0;
         this.runningTime = 0;
+        this.ogStart = 0;
     }
 
     // mutators
@@ -114,6 +117,11 @@ public class Process
         this.runningTime++;
     }
 
+    public void setOGStart(int o)
+    {
+        this.ogStart = o;
+    }
+
     // accessors
     public String getId()
     {
@@ -172,6 +180,11 @@ public class Process
     public int getRunningTime()
     {
         return this.runningTime;
+    }
+
+    public int getOGStart()
+    {
+        return this.ogStart;
     }
 
     // deep element cloning
