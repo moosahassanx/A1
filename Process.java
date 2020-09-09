@@ -14,6 +14,7 @@ public class Process
     private int status;     // 0 = NOT STARTED,     1 = RUNNING,    2 = PAUSED,     3 = FINISHED
     private int runningTime;
     private int ogStart;
+    private boolean HPC;
 
     // constructors
     public Process()
@@ -31,6 +32,7 @@ public class Process
         this.status = 0;
         this.runningTime = 0;
         this.ogStart = 0;
+        this.HPC = false;
     }
     public Process(String pID, int a, int e, int p)
     {
@@ -48,6 +50,16 @@ public class Process
         this.status = 0;
         this.runningTime = 0;
         this.ogStart = 0;
+        
+        // is High Priority Class
+        if(priority < 3)
+        {
+            this.HPC = true;
+        }
+        else
+        {
+            this.HPC = false;
+        }
     }
 
     // mutators
@@ -69,6 +81,11 @@ public class Process
     public void setPriority(int p)
     {
         this.priority = p;
+    }
+
+    public void setPriorityClass(boolean c)
+    {
+        this.HPC = c;
     }
 
     public void setTurnAround(int t)
@@ -143,6 +160,11 @@ public class Process
         return this.priority;
     }
 
+    public boolean isHPC()
+    {
+        return this.HPC;
+    }
+
     public int getTurnAround()
     {
         return this.turnaround;
@@ -185,21 +207,6 @@ public class Process
     public int getOGStart()
     {
         return this.ogStart;
-    }
-
-    // deep element cloning
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        Process clone = null;
-        try
-        {
-            clone = (Process) super.clone();
-        } 
-        catch (CloneNotSupportedException e) 
-        {
-            throw new RuntimeException(e);
-        }
-        return clone;
     }
 
     // returning status as string

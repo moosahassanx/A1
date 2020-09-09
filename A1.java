@@ -15,6 +15,7 @@ class A1
         ArrayList<Process> FCFSList = new ArrayList<Process>();
         ArrayList<Process> SPNList = new ArrayList<Process>();
         ArrayList<Process> PPList = new ArrayList<Process>();
+        ArrayList<Process> PRRList = new ArrayList<Process>();
         int dTime = 0;
 
         try
@@ -104,11 +105,13 @@ class A1
                     Process FCFSElement = new Process(processId, arriveTime, executionSize, priorityLevel);
                     Process SPNElement = new Process(processId, arriveTime, executionSize, priorityLevel);
                     Process PPElement = new Process(processId, arriveTime, executionSize, priorityLevel);
+                    Process PRRElement = new Process(processId, arriveTime, executionSize, priorityLevel);
 
                     // add to arraylist
                     FCFSList.add(FCFSElement);
                     SPNList.add(SPNElement);
                     PPList.add(PPElement);
+                    PRRList.add(PRRElement);
                 }
             }
         }
@@ -131,6 +134,7 @@ class A1
         FirstCome.feedProcess(FCFSList, dTime);
         ShortProcess.feedProcess(SPNList, dTime);
         Preemptive.feedProcess(PPList, dTime);
+        RoundRobin.feedProcess(PRRList, dTime);
 
         // printing results  
         //System.out.println("FCFS:");
@@ -141,16 +145,20 @@ class A1
         //ShortProcess.results();
         //ShortProcess.report();
 
-        System.out.println("PP:");
-        Preemptive.results();
-        Preemptive.report();
+        //System.out.println("PP:");
+        //Preemptive.results();
+        //Preemptive.report();
 
+        System.out.println("PRR:");
+        RoundRobin.results();
+        RoundRobin.report();
 
         // final summary
         System.out.println("Summary:");
         System.out.println("Algorithm\tAverage Turnaround Time\tAverage Waiting Time");
         //System.out.println("FCFS: \t\t" + FirstCome.getAverageTurnaroundTime() + "\t\t\t" + FirstCome.getAverageWaitingTime());     // FCFS
         //System.out.println("SPN: \t\t" + ShortProcess.getAverageTurnaroundTime() + "\t\t\t" + ShortProcess.getAverageWaitingTime() );  // SPN
-        System.out.println("PP: \t\t" + Preemptive.getAverageTurnaroundTime() + "\t\t\t" + Preemptive.getAverageWaitingTime());     // PP
+        //System.out.println("PP: \t\t" + Preemptive.getAverageTurnaroundTime() + "\t\t\t" + Preemptive.getAverageWaitingTime());     // PP
+        System.out.println("PRR: \t\t" + RoundRobin.getAverageTurnaroundTime() + "\t\t\t" + RoundRobin.getAverageWaitingTime());    // PRR
     }
 }
