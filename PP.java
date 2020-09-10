@@ -202,13 +202,3 @@ class sortByPriority implements Comparator<Process>
         return o1.getPriority() - o2.getPriority();
     }
 }
-
-/*
-    // TESTING
-    System.out.println("id\tarrive\trun\texec\tcomplet\tstarts\tturnAr\twaiting\tstatus");
-    for(int i = 0; i < fList.size(); i++)
-    {
-        System.out.println(fList.get(i).getId() + "(" + fList.get(i).getPriority() + ")" + "\t" + fList.get(i).getArrive() + "\t" + fList.get(i).getRunningTime() + "\t" + fList.get(i).getExecution() + "\t" + fList.get(i).getCompletion() + "\t" + fList.get(i).getOGStart() + "\t" + fList.get(i).getTurnAround() + "\t" + fList.get(i).getWaiting() + "\t" + fList.get(i).getStatusLine());
-    }
-    System.out.println("********************************************************************************");
-*/

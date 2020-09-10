@@ -59,11 +59,42 @@ public class PRR
             // NOT STARTED
             if(compMini.get(0).getStatus() == 0)
             {
-                compMini.get(0).setStatus(1);
-                compMini.get(0).setStartsAt(dTime + cpuWatch);
-                compMini.get(0).setOGStart(dTime + cpuWatch);
-                compMini.get(0).iterateRun();
                 cpuWatch += dTime;
+
+                compMini.get(0).setStatus(1);
+                compMini.get(0).setStartsAt(cpuWatch);
+                compMini.get(0).setOGStart(cpuWatch);
+
+                if(compMini.get(0).isHPC())
+                {
+                    for(int i = 0; i < 4; i++)
+                    {
+                        if(compMini.get(0).getRunningTime() != compMini.get(0).getExecution())
+                        {
+                            compMini.get(0).iterateRun();
+                            cpuWatch++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    for(int i = 0; i < 2; i++)
+                    {
+                        if(compMini.get(0).getRunningTime() != compMini.get(0).getExecution())
+                        {
+                            compMini.get(0).iterateRun();
+                            cpuWatch++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
 
                 if(tList.size() == 0)
                 {
@@ -85,17 +116,48 @@ public class PRR
             // PAUSED
             else if(compMini.get(0).getStatus() == 2)
             {
-                compMini.get(0).setStartsAt(dTime + cpuWatch);
-                compMini.get(0).iterateRun();
-                compMini.get(0).setStatus(1);
                 cpuWatch += dTime;
+                compMini.get(0).setStartsAt(cpuWatch);
+                
+                if(compMini.get(0).isHPC())
+                {
+                    for(int i = 0; i < 4; i++)
+                    {
+                        if(compMini.get(0).getRunningTime() != compMini.get(0).getExecution())
+                        {
+                            compMini.get(0).iterateRun();
+                            cpuWatch++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    for(int i = 0; i < 2; i++)
+                    {
+                        if(compMini.get(0).getRunningTime() != compMini.get(0).getExecution())
+                        {
+                            compMini.get(0).iterateRun();
+                            cpuWatch++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                compMini.get(0).setStatus(1);
             }
 
             // FINISHED
             if(compMini.get(0).getRunningTime() == compMini.get(0).getExecution())
             {
                 compMini.get(0).setStatus(3);
-                compMini.get(0).setCompletion(cpuWatch + dTime);
+                compMini.get(0).setCompletion(cpuWatch);
                 fList.add(compMini.get(0));
                 PRRList.remove(compMini.get(0));
             }
@@ -113,10 +175,20 @@ public class PRR
             }
             
             compMini.clear();
-            cpuWatch++;
         }
 
-        /*
+        Collections.sort(fList, new sortByProcessId());
+        for(int i = 0; i < fList.size(); i++)
+        {
+            // calculating turnaround/waiting times
+            fList.get(i).setTurnAround(fList.get(i).getCompletion() - fList.get(i).getArrive());
+            fList.get(i).setWaiting(fList.get(i).getTurnAround() - fList.get(i).getExecution());
+
+            // accumulating total turnaround/waiting times
+            tta += fList.get(i).getTurnAround();
+            twt += fList.get(i).getWaiting();
+        }
+
         // TESTING
         System.out.println("id\tarrive\trun\texec\tcomplet\tstarts\tturnAr\twaiting\tstatus");
         for(int i = 0; i < fList.size(); i++)
@@ -124,7 +196,6 @@ public class PRR
             System.out.println(fList.get(i).getId() + "(" + fList.get(i).getPriority() + ")" + "\t" + fList.get(i).getArrive() + "\t" + fList.get(i).getRunningTime() + "\t" + fList.get(i).getExecution() + "\t" + fList.get(i).getCompletion() + "\t" + fList.get(i).getOGStart() + "\t" + fList.get(i).getTurnAround() + "\t" + fList.get(i).getWaiting() + "\t" + fList.get(i).getStatusLine());
         }
         System.out.println("********************************************************************************");
-        */
 
     }
 
@@ -139,25 +210,34 @@ public class PRR
     // start time | process id | process priority
     public void results()
     {
-        System.out.println("results() method is yet to be made");
+        for(int i = 0; i < tList.size(); i++)
+        {
+            System.out.println(tList.get(i));
+        }
+        System.out.println();
     }
 
     // process id | turnaround time | waiting time
     public void report()
     {
+        Collections.sort(fList, new sortByProcessId());
         System.out.println("Process\tTurnaround Time\tWaiting Time");
-        System.out.println("NEEDS DATA");
+        for(int  i = 0 ; i< fList.size();  i++)
+        {
+            System.out.println(fList.get(i).getId() + "\t" + fList.get(i).getTurnAround() + "\t\t" + fList.get(i).getWaiting() );
+        }
+        System.out.println();
     }
 
     // TODO: needs to be finished
     public double getAverageTurnaroundTime()
     {
-        return 0;
+        return (double)this.tta / this.fList.size();
     }
 
     // TODO: needs to be finished
     public double getAverageWaitingTime()
     {
-        return 0;
+        return (double)this.twt / this.fList.size();
     }
 }
