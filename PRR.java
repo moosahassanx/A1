@@ -229,13 +229,11 @@ public class PRR
         System.out.println();
     }
 
-    // TODO: needs to be finished
     public double getAverageTurnaroundTime()
     {
         return (double)this.tta / this.fList.size();
     }
 
-    // TODO: needs to be finished
     public double getAverageWaitingTime()
     {
         return (double)this.twt / this.fList.size();
