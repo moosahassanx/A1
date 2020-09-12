@@ -1,3 +1,10 @@
+// TITLE: 					Assignment1
+// COURSE: 					COMP2240
+// AUTHOR: 					Moosa Hassan
+// STUDENT NUMBER: 			3331532
+// DATE: 					13/09/2020 
+// DESCRIPTION: 			Basically a storage file for each process.
+
 public class Process
 {
     // class attributes
@@ -131,7 +138,8 @@ public class Process
         this.runningTime = r;
     }
 
-    public void iterateRun() {
+    public void iterateRun() 
+    {
         this.runningTime++;
     }
 
@@ -191,7 +199,8 @@ public class Process
         return this.isProcessed;
     }
 
-    public int getStartsAt() {
+    public int getStartsAt() 
+    {
         return this.startsAt;
     }
 

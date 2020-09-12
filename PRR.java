@@ -1,3 +1,11 @@
+// TITLE: 					Assignment1
+// COURSE: 					COMP2240
+// AUTHOR: 					Moosa Hassan
+// STUDENT NUMBER: 			3331532
+// DATE: 					13/09/2020 
+// DESCRIPTION: 			Calculations and printing results for Preemptive Round Robin algorithm.
+
+// importing java packages
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -54,21 +62,23 @@ public class PRR
         tList.add(feed);
 
         // business
-        while (PRRList.size() > 0) 
+        while (PRRList.size() > 0)
         {
             cProcess = q.poll();
 
             // determining iteration
             int progress = 0;
-            if (cProcess.isHPC() == true) 
+            if (cProcess.isHPC() == true)
             {
                 progress = 4;
-            } else 
+            } 
+            else
             {
                 progress = 2;
             }
             // running process depending on iteration
-            for (int i = 0; i < progress; i++) {
+            for (int i = 0; i < progress; i++) 
+            {
                 if (cProcess.getExecution() != cProcess.getRunningTime()) 
                 {
                     cProcess.iterateRun();
@@ -89,9 +99,8 @@ public class PRR
             for (int i = 0; i < PRRList.size(); i++) 
             {
                 // queues everything except cProcess
-                if ((PRRList.get(i).getArrive() <= cpuWatch) && (!q.contains(PRRList.get(i)))
-                        && (PRRList.get(i) != cProcess)) 
-                        {
+                if ((PRRList.get(i).getArrive() <= cpuWatch) && (!q.contains(PRRList.get(i))) && (PRRList.get(i) != cProcess)) 
+                {
                     q.add(PRRList.get(i));
                 }
             }
@@ -154,11 +163,11 @@ public class PRR
         System.out.println();
     }
 
+    // calculating averages
     public double getAverageTurnaroundTime()
     {
         return (double)this.tta / this.fList.size();
     }
-
     public double getAverageWaitingTime()
     {
         return (double)this.twt / this.fList.size();

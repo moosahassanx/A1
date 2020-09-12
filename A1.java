@@ -1,3 +1,10 @@
+// TITLE: 					Assignment1
+// COURSE: 					COMP2240
+// AUTHOR: 					Moosa Hassan
+// STUDENT NUMBER: 			3331532
+// DATE: 					13/09/2020 
+// DESCRIPTION: 			Main file - reads data text files and sends it to each algorithm class
+
 // importing java libraries (file scanner and string output)
 import java.io.*;
 import java.util.Scanner;

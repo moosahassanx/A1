@@ -3,7 +3,7 @@
 // AUTHOR: 					Moosa Hassan
 // STUDENT NUMBER: 			3331532 
 // DATE: 					13/09/2020 
-// DESCRIPTION: 			Calculations and printing results for SPN algorithm.
+// DESCRIPTION: 			Calculations and printing results for Shortest Process Next algorithm.
 
 
 // importing java packages
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class SPN 
+public class SPN
 {
     // attributes
     private double twt;   // total waiting time
@@ -92,7 +92,8 @@ public class SPN
 
         // final calculations
         Collections.sort(bList, new sortByProcessId());
-        for (int i = 0; i < bList.size(); i++) {
+        for (int i = 0; i < bList.size(); i++) 
+        {
             // calculating turnaround/waiting times
             bList.get(i).setTurnAround(bList.get(i).getCompletion() - bList.get(i).getArrive());
             bList.get(i).setWaiting(bList.get(i).getTurnAround() - bList.get(i).getExecution());
@@ -105,11 +106,11 @@ public class SPN
     }
 
     // process id | turnaround time | waiting time
-    public void report() 
+    public void report()
     {
         Collections.sort(bList, new sortByProcessId());
         System.out.println("Process\tTurnaround Time\tWaiting Time");
-        for (int i = 0; i < bList.size(); i++) 
+        for (int i = 0; i < bList.size(); i++)
         {
             System.out.println(
                     bList.get(i).getId() + "\t" + bList.get(i).getTurnAround() + "\t\t" + bList.get(i).getWaiting());
@@ -118,9 +119,10 @@ public class SPN
     }
 
     // start time | process id | process priority
-    public void results() {
+    public void results()
+    {
         Collections.sort(bList, new sortByStartsAt());
-        for (int i = 0; i < bList.size(); i++) 
+        for (int i = 0; i < bList.size(); i++)
         {
             System.out.println("T" + bList.get(i).getStartsAt() + ": " + bList.get(i).getId() + "("
                     + bList.get(i).getPriority() + ")");
@@ -128,19 +130,18 @@ public class SPN
         System.out.println();
     }
 
-    // calcualtion averages
-    public double getAverageWaitingTime() 
+    // calculating averages
+    public double getAverageWaitingTime()
     {
         return this.twt / this.bList.size();
     }
-
-    public double getAverageTurnaroundTime() 
+    public double getAverageTurnaroundTime()
     {
         return this.tta / this.bList.size();
     }
 
     // sorting in accordance to arrival
-    public ArrayList<Process> sortArrive(final ArrayList<Process> processList) 
+    public ArrayList<Process> sortArrive(final ArrayList<Process> processList)
     {
         Collections.sort(processList, Comparator.comparing(Process::getArrive).thenComparing(Process::getArrive));
         return processList;

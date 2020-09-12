@@ -3,7 +3,7 @@
 // AUTHOR: 					Moosa Hassan
 // STUDENT NUMBER: 			3331532
 // DATE: 					13/09/2020 
-// DESCRIPTION: 			Calculations and printing results for FCFS algorithm. Contains most comparable classes too.
+// DESCRIPTION: 			Calculations and printing results for First Comes First Serve algorithm. Contains most comparable classes too.
 
 // importing java packages
 import java.util.ArrayList;
@@ -18,16 +18,19 @@ public class FCFS
     private final ArrayList<Process> FCFSList; // cloned arraylist
 
     // constructor
-    public FCFS() {
+    public FCFS() 
+    {
         this.twt = 0;
         this.tta = 0;
         this.FCFSList = new ArrayList<Process>();
     }
 
     // methods
-    public void feedProcess(final ArrayList<Process> ogList, final int dTime) {
+    public void feedProcess(final ArrayList<Process> ogList, final int dTime) 
+    {
         // deep element arraylist cloning
-        for (int i = 0; i < ogList.size(); i++) {
+        for (int i = 0; i < ogList.size(); i++) 
+        {
             this.FCFSList.add(ogList.get(i));
         }
 
@@ -35,19 +38,24 @@ public class FCFS
         Collections.sort(FCFSList, new sortByArrival());
 
         // finding completion times
-        for (int i = 0; i < FCFSList.size(); i++) {
+        for (int i = 0; i < FCFSList.size(); i++) 
+        {
             // first iteration
-            if (i == 0) {
+            if (i == 0) 
+            {
                 FCFSList.get(i).setStartsAt(dTime);
                 FCFSList.get(i).setCompletion(dTime + FCFSList.get(i).getArrive() + FCFSList.get(i).getExecution());
-            } else {
+            } else 
+            {
                 // arrival time > completion time
-                if (FCFSList.get(i).getArrive() > FCFSList.get(i - 1).getCompletion()) {
+                if (FCFSList.get(i).getArrive() > FCFSList.get(i - 1).getCompletion()) 
+                {
                     FCFSList.get(i).setStartsAt(FCFSList.get(i - 1).getCompletion() + dTime);
                     FCFSList.get(i).setCompletion(dTime + FCFSList.get(i).getArrive() + FCFSList.get(i).getExecution());
                 }
                 // arrival time < completion time
-                else {
+                else 
+                {
                     FCFSList.get(i).setStartsAt(FCFSList.get(i - 1).getCompletion() + dTime);
                     FCFSList.get(i).setCompletion(
                             dTime + FCFSList.get(i - 1).getCompletion() + FCFSList.get(i).getExecution());
@@ -65,12 +73,13 @@ public class FCFS
     }
 
     // process id | turnaround time | waiting time
-    public void report() {
+    public void report() 
+    {
         Collections.sort(FCFSList, new sortByProcessId());
         System.out.println("Process\tTurnaround Time\tWaiting Time");
-        for (int i = 0; i < FCFSList.size(); i++) {
-            System.out.println(FCFSList.get(i).getId() + "\t" + FCFSList.get(i).getTurnAround() + "\t\t"
-                    + FCFSList.get(i).getWaiting());
+        for (int i = 0; i < FCFSList.size(); i++) 
+        {
+            System.out.println(FCFSList.get(i).getId() + "\t" + FCFSList.get(i).getTurnAround() + "\t\t" + FCFSList.get(i).getWaiting());
         }
         System.out.println();
     }
@@ -78,7 +87,8 @@ public class FCFS
     // start time | process id | process priority
     public void results() {
         Collections.sort(FCFSList, new sortByStartsAt());
-        for (int i = 0; i < FCFSList.size(); i++) {
+        for (int i = 0; i < FCFSList.size(); i++) 
+        {
             System.out.println("T" + FCFSList.get(i).getStartsAt() + ": " + FCFSList.get(i).getId() + "("
                     + FCFSList.get(i).getPriority() + ")");
         }
@@ -86,38 +96,46 @@ public class FCFS
     }
 
     // calculating averages
-    public double getAverageWaitingTime() {
+    public double getAverageWaitingTime() 
+    {
         return this.twt / this.FCFSList.size();
     }
-
-    public double getAverageTurnaroundTime() {
+    public double getAverageTurnaroundTime() 
+    {
         return this.tta / this.FCFSList.size();
     }
 }
 
 // sorting in accordance to arrival
-class sortByArrival implements Comparator<Process> {
-    public int compare(final Process o1, final Process o2) {
+class sortByArrival implements Comparator<Process> 
+{
+    public int compare(final Process o1, final Process o2) 
+    {
         return o1.getArrive() - o2.getArrive();
     }
 }
 
 // sorting in accordance to process id
-class sortByProcessId implements Comparator<Process> {
-    public int compare(final Process o1, final Process o2) {
+class sortByProcessId implements Comparator<Process> 
+{
+    public int compare(final Process o1, final Process o2) 
+    {
         return o1.getProcessNumber() - o2.getProcessNumber();
     }
 }
 
 // sorting in accordance to waiting
-class sortByWaiting implements Comparator<Process> {
-    public int compare(final Process o1, final Process o2) {
+class sortByWaiting implements Comparator<Process> 
+{
+    public int compare(final Process o1, final Process o2) 
+    {
         return o1.getWaiting() - o2.getWaiting();
     }
 }
 
 // sorting in accordance to starts at time
-class sortByStartsAt implements Comparator<Process> {
+class sortByStartsAt implements Comparator<Process> 
+{
     public int compare(final Process o1, final Process o2)
     {
         return o1.getStartsAt() - o2.getStartsAt();
