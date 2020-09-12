@@ -2,7 +2,7 @@ public class Process
 {
     // class attributes
     private String processId;
-    private int processNumber;
+    private final int processNumber;
     private int arrive;
     private int execution;
     private int turnaround;
@@ -11,13 +11,13 @@ public class Process
     private int priority;
     private boolean isProcessed;
     private int startsAt;
-    private int status;     // 0 = NOT STARTED,     1 = RUNNING,    2 = PAUSED,     3 = FINISHED
+    private int status; // 0 = NOT STARTED, 1 = RUNNING, 2 = PAUSED, 3 = FINISHED
     private int runningTime;
     private int ogStart;
     private boolean HPC;
 
     // constructors
-    public Process()
+    public Process() 
     {
         this.processId = "";
         this.processNumber = 0;
@@ -34,10 +34,11 @@ public class Process
         this.ogStart = 0;
         this.HPC = false;
     }
-    public Process(String pID, int a, int e, int p)
+
+    public Process(final String pID, final int a, final int e, final int p) 
     {
         this.processId = pID;
-        int test = processId.charAt(1);
+        final int test = processId.charAt(1);
         this.processNumber = test;
         this.arrive = a;
         this.execution = e;
@@ -50,91 +51,91 @@ public class Process
         this.status = 0;
         this.runningTime = 0;
         this.ogStart = 0;
-        
+
         // is High Priority Class
-        if(priority < 3)
+        if (priority < 3) 
         {
             this.HPC = true;
-        }
-        else
+        } 
+        else 
         {
             this.HPC = false;
         }
     }
 
     // mutators
-    public void setId(String i)
+    public void setId(final String i) 
     {
         this.processId = i;
     }
 
-    public void setArrive(int a)
+    public void setArrive(final int a) 
     {
         this.arrive = a;
     }
 
-    public void setExecution(int e)
+    public void setExecution(final int e) 
     {
         this.execution = e;
     }
 
-    public void setPriority(int p)
+    public void setPriority(final int p) 
     {
         this.priority = p;
     }
 
-    public void setPriorityClass(boolean c)
+    public void setPriorityClass(final boolean c) 
     {
         this.HPC = c;
     }
 
-    public void setTurnAround(int t)
+    public void setTurnAround(final int t) 
     {
         this.turnaround = t;
     }
 
-    public void setWaiting(int w)
+    public void setWaiting(final int w) 
     {
         this.waiting = w;
     }
 
-    public void setCompletion(int c)
+    public void setCompletion(final int c) 
     {
         this.completion = c;
     }
 
-    public void setFlag(boolean f)
+    public void setFlag(final boolean f) 
     {
         this.isProcessed = f;
     }
 
-    public void clearCalculations()
+    public void clearCalculations() 
     {
         this.turnaround = 0;
         this.waiting = 0;
         this.completion = 0;
     }
-    
-    public void setStartsAt(int s)
+
+    public void setStartsAt(final int s) 
     {
         this.startsAt = s;
     }
 
-    public void setStatus(int s)
+    public void setStatus(final int s) 
     {
         this.status = s;
     }
 
-    public void setRunningTime(int r)
+    public void setRunningTime(final int r) 
     {
         this.runningTime = r;
     }
-    public void iterateRun()
-    {
+
+    public void iterateRun() {
         this.runningTime++;
     }
 
-    public void setOGStart(int o)
+    public void setOGStart(final int o)
     {
         this.ogStart = o;
     }

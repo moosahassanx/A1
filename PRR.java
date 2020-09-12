@@ -7,29 +7,29 @@ import java.util.Queue;
 public class PRR
 {
     // attributes
-    private ArrayList<Process> PRRList;
-    private ArrayList<String> tList;
-    private ArrayList<Process> fList;
+    private final ArrayList<Process> PRRList;
+    private final ArrayList<String> tList;
+    private final ArrayList<Process> fList;
     Queue<Process> q;
-    private int twt;        // total waiting time
-    private int tta;        // total turnaround time
+    private int twt; // total waiting time
+    private int tta; // total turnaround time
 
     // constructor
-    public PRR()
+    public PRR() 
     {
         this.PRRList = new ArrayList<Process>();
         this.tList = new ArrayList<String>();
         this.fList = new ArrayList<Process>();
-        q = new LinkedList<Process>(); 
+        q = new LinkedList<Process>();
         this.twt = 0;
         this.tta = 0;
     }
 
     // methods
-    public void feedProcess(ArrayList<Process> ogList, int dTime)
+    public void feedProcess(final ArrayList<Process> ogList, final int dTime) 
     {
         // deep element arraylist cloning
-        for(int i = 0; i < ogList.size(); i++)
+        for (int i = 0; i < ogList.size(); i++) 
         {
             this.PRRList.add(ogList.get(i));
         }
@@ -40,352 +40,78 @@ public class PRR
         Process cProcess = null;
 
         // getting qualified processes
-        for(int i = 0; i < PRRList.size(); i++)
+        for (int i = 0; i < PRRList.size(); i++) 
         {
-            if((PRRList.get(i).getArrive() <= cpuWatch) && (PRRList.get(i).getStatus() != 3))
+            if ((PRRList.get(i).getArrive() <= cpuWatch) && (PRRList.get(i).getStatus() != 3)) 
             {
                 q.add(PRRList.get(i));
             }
         }
 
+        cpuWatch += dTime;
+
+        String feed = "T" + cpuWatch + ": " + q.peek().getId() + "(" + q.peek().getPriority() + ")";
+        tList.add(feed);
+
         // business
-        while(PRRList.size() > 0)
-        {            
-            Process tProcess = q.poll();
-
-            // NOT STARTED
-            if(tProcess.getStatus() == 0)
-            {
-                cpuWatch += dTime;
-                tProcess.setStatus(1);
-                tProcess.setStartsAt(cpuWatch);
-                tProcess.setOGStart(cpuWatch);
-
-                // iterate list depending on priority class
-                if(tProcess.isHPC())
-                {
-                    for(int i = 0; i < 4; i++)
-                    {
-                        if(tProcess.getRunningTime() != tProcess.getExecution())
-                        {
-                            tProcess.iterateRun();
-                            cpuWatch++;
-
-                            // getting qualified processes
-                            for(int j = 0; j < PRRList.size(); j++)
-                            {
-                                if((PRRList.get(j).getArrive() <= cpuWatch) && (PRRList.get(j).getStatus() != 3))
-                                {
-                                    if(PRRList.get(j) != tProcess)
-                                    {
-                                        q.add(PRRList.get(j));
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    ArrayList<Process> compMini = new ArrayList<Process>();
-                    for(int i = 0; i < 2; i++)
-                    {
-                        if(tProcess.getRunningTime() != tProcess.getExecution())
-                        {
-                            tProcess.iterateRun();
-                            cpuWatch++;
-
-                            // getting qualified processes
-                            for(int j = 0; j < PRRList.size(); j++)
-                            {
-                                if((PRRList.get(j).getArrive() <= cpuWatch) && (PRRList.get(j).getStatus() != 3))
-                                {
-                                    if(tProcess != PRRList.get(j))
-                                    {
-                                        compMini.add(PRRList.get(j));
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    q.add(compMini.get(0));
-                    compMini.clear();
-                }
-
-                if(tList.size() == 0)
-                {
-                    String feed = "T" + tProcess.getStartsAt() + ": " + tProcess.getId() + "(" + tProcess.getPriority() + ")";
-                    tList.add(feed);
-                }
-
-                if(cProcess != null)
-                {
-                    cProcess.setStatus(2);
-                }
-            }
-            // RUNNING
-            else if(tProcess.getStatus() == 1)
-            {
-                tProcess.iterateRun();
-            }
-            // PAUSED
-            else if(tProcess.getStatus() == 2)
-            {
-                cpuWatch += dTime;
-                tProcess.setStartsAt(cpuWatch);
-                
-                if(tProcess.isHPC())
-                {
-                    for(int i = 0; i < 4; i++)
-                    {
-                        if(tProcess.getRunningTime() != tProcess.getExecution())
-                        {
-                            tProcess.iterateRun();
-                            cpuWatch++;
-
-                            // getting qualified processes
-                            for(int j = 0; j < PRRList.size(); j++)
-                            {
-                                if((PRRList.get(j).getArrive() <= cpuWatch) && (PRRList.get(j).getStatus() != 3))
-                                {
-                                    if(PRRList.get(j) != tProcess)
-                                    {
-                                        q.add(PRRList.get(j));
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    ArrayList<Process> compMini = new ArrayList<Process>();
-                    for(int i = 0; i < 2; i++)
-                    {
-                        if(tProcess.getRunningTime() != tProcess.getExecution())
-                        {
-                            tProcess.iterateRun();
-                            cpuWatch++;
-
-                            // getting qualified processes
-                            for(int j = 0; j < PRRList.size(); j++)
-                            {
-                                if((PRRList.get(j).getArrive() <= cpuWatch) && (PRRList.get(j).getStatus() != 3))
-                                {
-                                    if(tProcess != PRRList.get(j))
-                                    {
-                                        compMini.add(PRRList.get(j));
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    q.add(compMini.get(0));
-                    compMini.clear();
-                }
-
-                tProcess.setStatus(1);
-            }
-            // FINISHED
-            if(tProcess.getRunningTime() == tProcess.getExecution())
-            {
-                tProcess.setStatus(3);
-                tProcess.setCompletion(cpuWatch);
-                fList.add(tProcess);
-                PRRList.remove(tProcess);
-            }
-
-            // selecting current process for next lot
-            if(cProcess == null)
-            {
-                cProcess = tProcess;
-            }
-            else if(cProcess != tProcess)
-            {
-                cProcess = tProcess;
-                String feed = "T" + cProcess.getStartsAt() + ": " + cProcess.getId() + "(" + cProcess.getPriority() + ")";
-                tList.add(feed);
-            }
-
-
-        }
-
-        /*
-        while(PRRList.size() > 0)
+        while (PRRList.size() > 0) 
         {
-            if(compMini.size() == 0)
+            cProcess = q.poll();
+
+            // determining iteration
+            int progress = 0;
+            if (cProcess.isHPC() == true) 
             {
-                // getting qualified processes
-                for(int i = 0; i < PRRList.size(); i++)
+                progress = 4;
+            } else 
+            {
+                progress = 2;
+            }
+            // running process depending on iteration
+            for (int i = 0; i < progress; i++) {
+                if (cProcess.getExecution() != cProcess.getRunningTime()) 
                 {
-                    if((PRRList.get(i).getArrive() <= cpuWatch) && (PRRList.get(i).getStatus() != 3))
-                    {
-                        compMini.add(PRRList.get(i));
-                    }
+                    cProcess.iterateRun();
+                    cpuWatch++;
                 }
             }
 
-            if(compMini.size() == 0)
+            // process is finished
+            if (cProcess.getExecution() == cProcess.getRunningTime()) 
             {
-                cpuWatch++;
-                continue;
+                cProcess.setStatus(3);
+                cProcess.setCompletion(cpuWatch);
+                fList.add(cProcess);
+                PRRList.remove(cProcess);
             }
 
-            // running the processes
-            Collections.sort(compMini, new sortByArrival());
-
-            if(cProcess != null)
+            // check qualified process
+            for (int i = 0; i < PRRList.size(); i++) 
             {
-                if(compMini.get(0).getId().equals(cProcess.getId()))
-                {
-                    Process tempProcess = compMini.get(0);
-                    compMini.remove(0);
-                    compMini.add(tempProcess);
+                // queues everything except cProcess
+                if ((PRRList.get(i).getArrive() <= cpuWatch) && (!q.contains(PRRList.get(i)))
+                        && (PRRList.get(i) != cProcess)) 
+                        {
+                    q.add(PRRList.get(i));
                 }
             }
 
-            // NOT STARTED
-            if(compMini.get(0).getStatus() == 0)
+            if ((q.contains(cProcess) == false) && (PRRList.contains(cProcess) == true)) 
             {
-                cpuWatch += dTime;
-
-                compMini.get(0).setStatus(1);
-                compMini.get(0).setStartsAt(cpuWatch);
-                compMini.get(0).setOGStart(cpuWatch);
-
-                if(compMini.get(0).isHPC())
-                {
-                    for(int i = 0; i < 4; i++)
-                    {
-                        if(compMini.get(0).getRunningTime() != compMini.get(0).getExecution())
-                        {
-                            compMini.get(0).iterateRun();
-                            cpuWatch++;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    for(int i = 0; i < 2; i++)
-                    {
-                        if(compMini.get(0).getRunningTime() != compMini.get(0).getExecution())
-                        {
-                            compMini.get(0).iterateRun();
-                            cpuWatch++;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                if(tList.size() == 0)
-                {
-                    String feed = "T" + compMini.get(0).getStartsAt() + ": " + compMini.get(0).getId() + "(" + compMini.get(0).getPriority() + ")";
-                    tList.add(feed);
-                }
-
-                if(cProcess != null)
-                {
-                    cProcess.setStatus(2);
-                }
-
-            }
-            // RUNNING
-            else if(compMini.get(0).getStatus() == 1)
-            {
-                compMini.get(0).iterateRun();
-            }
-            // PAUSED
-            else if(compMini.get(0).getStatus() == 2)
-            {
-                cpuWatch += dTime;
-                compMini.get(0).setStartsAt(cpuWatch);
-                
-                if(compMini.get(0).isHPC())
-                {
-                    for(int i = 0; i < 4; i++)
-                    {
-                        if(compMini.get(0).getRunningTime() != compMini.get(0).getExecution())
-                        {
-                            compMini.get(0).iterateRun();
-                            cpuWatch++;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    for(int i = 0; i < 2; i++)
-                    {
-                        if(compMini.get(0).getRunningTime() != compMini.get(0).getExecution())
-                        {
-                            compMini.get(0).iterateRun();
-                            cpuWatch++;
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                compMini.get(0).setStatus(1);
-            }
-
-            // FINISHED
-            if(compMini.get(0).getRunningTime() == compMini.get(0).getExecution())
-            {
-                compMini.get(0).setStatus(3);
-                compMini.get(0).setCompletion(cpuWatch);
-                fList.add(compMini.get(0));
-                PRRList.remove(compMini.get(0));
+                q.add(cProcess);
             }
 
             // selecting current process for next lot
-            if(cProcess == null)
+            if ((cProcess != q.peek()) && (q.peek() != null)) 
             {
-                cProcess = compMini.get(0);
-            }
-            else if(cProcess != compMini.get(0))
-            {
-                cProcess = compMini.get(0);
-                String feed = "T" + cProcess.getStartsAt() + ": " + cProcess.getId() + "(" + cProcess.getPriority() + ")";
+                cpuWatch += dTime;
+                feed = "T" + cpuWatch + ": " + q.peek().getId() + "(" + q.peek().getPriority() + ")";
                 tList.add(feed);
             }
-            
-            compMini.remove(cProcess);      // whack testing
         }
-        */
 
         Collections.sort(fList, new sortByProcessId());
-        for(int i = 0; i < fList.size(); i++)
+        for (int i = 0; i < fList.size(); i++) 
         {
             // calculating turnaround/waiting times
             fList.get(i).setTurnAround(fList.get(i).getCompletion() - fList.get(i).getArrive());
@@ -396,18 +122,10 @@ public class PRR
             twt += fList.get(i).getWaiting();
         }
 
-        // TESTING
-        System.out.println("id\tarrive\trun\texec\tcomplet\tstarts\tturnAr\twaiting\tstatus");
-        for(int i = 0; i < fList.size(); i++)
-        {
-            System.out.println(fList.get(i).getId() + "(" + fList.get(i).getPriority() + ")" + "\t" + fList.get(i).getArrive() + "\t" + fList.get(i).getRunningTime() + "\t" + fList.get(i).getExecution() + "\t" + fList.get(i).getCompletion() + "\t" + fList.get(i).getOGStart() + "\t" + fList.get(i).getTurnAround() + "\t" + fList.get(i).getWaiting() + "\t" + fList.get(i).getStatusLine());
-        }
-        System.out.println("********************************************************************************");
-
     }
 
     // sorting in accordance to arrival
-    public ArrayList<Process> sortArrive(ArrayList<Process> processList)
+    public ArrayList<Process> sortArrive(final ArrayList<Process> processList)
     {
         Collections.sort(processList, Comparator.comparing(Process::getArrive)
             .thenComparing(Process::getArrive));
